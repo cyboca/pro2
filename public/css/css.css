@@ -1,0 +1,308 @@
+@charset "utf-8";
+/* CSS Document */
+/**css样式重置代码**/
+html,body,ul,li,ol,dl,dd,dt,p,h1,h2,h3,h4,h5,h6,form,fieldset,legend,img {
+    margin: 0;
+    padding: 0;
+	font-weight:normal;
+	font-size:14px;
+}
+fieldset,img {
+    border: 0;
+}
+img {
+    display: block;
+}
+input {
+    padding-top: 0;
+    padding-bottom: 0;
+    font-family: "Microsoft YaHei";
+}
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+select,input {
+    vertical-align: middle;
+}
+select,input,textarea {
+    font-size: 12px;
+    margin: 0;
+}
+input[type="text"],input[type="password"],textarea {
+    outline-style: none;
+    -webkit-appearance: none;
+}
+textarea {
+    resize: none;
+}
+table {
+    border-collapse: collapse;
+}
+a {
+	color:#666;
+	text-decoration:none;
+}
+a:active, a:hover {
+	text-decoration:none;
+}
+.noAccount{
+	color:#175199;
+	cursor:pointer;
+	font-size:14px;
+	float:left;
+	height:14px;
+	line-height:14px;
+	margin-top:20px;
+}
+.haveAccount{
+	float:right;
+	font-size:14px;
+	color:#9aaabf;
+	height:14px;
+	line-height:14px;
+	margin-top:20px;
+}
+.forgetPassword{
+	color:#8590a6;
+	font-size:14px;
+	cursor:pointer;
+	float:right;
+	height:14px;
+	line-height:14px;
+	margin-top:20px;
+}
+.haveAccount span{
+	color:#00aeff;
+	cursor:pointer;
+}
+/**首页样式开始**/
+body{
+	background:#f3f3f3;
+	font-family:"Microsoft YaHei";
+	min-height: 100%;
+}
+html{
+	min-height: 100%;
+	position: relative;
+}
+
+
+
+.head{
+	height:82px;
+	width:100%;
+	background:#ffffff;
+	box-shadow: 0 0 20px #dcdcdc;
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:997;
+}
+.headContent{
+	width:960px;
+	height:82px;
+	margin:0 auto;
+}
+.headContent h1{
+	color:#00aeff;
+	font-size:32px;
+	height:82px;
+	line-height:82px;
+	float:left;
+	cursor: default;
+	margin-left:20px;
+}
+.headContent ul{
+	height:82px;
+	width:500px;
+	float:left;
+}
+.headContent ul li{
+	height:82px;
+	margin-left:48px;
+	float:left;
+	font-size:22px;
+	color:#8590a6;
+	line-height:82px;
+	text-align:center;
+}
+.signIn{
+	width:235px;
+	height:82px;
+	float:right;
+}
+.signIn p{
+	font-size:22px;
+	height:40px;
+	line-height:40px;
+	margin-top:21px;
+	float:right;
+	padding:0 20px;
+	border-radius:3px;
+	cursor:pointer;
+}
+.signInButtonTop{
+	color:#00aeff;
+	border:solid 1px #00aeff;
+	box-sizing:border-box;
+}
+.registerButton{
+	color:#ffffff;
+	background:#00aeff;
+	margin-right:20px;
+}
+.signInterface{
+	height:354px;
+	width:400px;
+	position:fixed;
+	top:50%;
+	left:50%;
+	margin-top:-177px;
+	margin-left:-200px;
+	background:#ffffff;
+	z-index:999;
+	box-shadow: 0 5px 20px 0 rgba(0,34,77,.5);
+}
+.signInterface h1{
+	height:90px;
+	width:100%;
+	line-height:90px;
+	background:#00aeff;
+	color:#ffffff;
+	text-align:center;
+	font-size:32px;
+}
+.inputGroup{
+	height:264px;
+	width:352px;
+	margin-left:24px;
+	margin-top:10px;
+}
+.Input {
+    padding: 0;
+    overflow: hidden;
+    font-size: 14px;
+    background: transparent;
+	font-family: inherit;
+    border: none;
+    outline: none;
+    resize: none;
+	height:48px;
+	line-height:24px;
+	border-bottom: 1px solid #e7eaf1;
+	color:#8590a6;
+	float:left;
+	width:100%;
+	margin-top:10px;
+}
+.signInButton{
+	background:#00aeff;
+	font-size:14px;
+	text-align:center;
+	height:34px;
+	width:100%;
+	line-height:34px;
+	color:#ffffff;
+	float:left;
+	margin-top:30px;
+	border-radius:3px;
+	cursor:pointer;
+	border:none;
+}
+.close{
+	width:28px;
+	height:28px;
+	position:fixed;
+	top:50%;
+	left:50%;
+	margin-left:220px;
+	margin-top:-160px;
+	z-index:999;
+	cursor:pointer;
+}
+.floatTop{
+	width:100%;
+	height:100%;
+	position:fixed;
+	z-index:999;	/*元素堆叠顺序,大的在上*/
+	top:0;
+	left:0;
+	display:none;
+}
+.reigsterInterface{
+	height:350px;
+}
+.floatTopRegister{
+	width:100%;
+	height:100%;
+	position:fixed;
+	z-index:999;
+	top:0;
+	left:0;
+	display:none;
+}
+/*mysql ftp information*/
+.mysqlPanel{
+	display: none;
+}
+.ftpPanel{
+	display: none;
+}
+.iframe-wrapper{
+	border-style: solid;
+	border-width: 2px;
+	border-color: #000000;
+	width: 800px;
+	height: 500px;
+}
+#iframe{
+	width: 100%;
+	height: 100%;
+}
+#password{
+	vertical-align: middle;
+	/*块级元素设置float后下一个元素紧跟*/
+	float: left;
+}
+.visible{
+	height: 20px;
+	width: 20px;
+	margin-top: 20px;
+	vertical-align: middle;
+}
+.accountUser {
+	padding: 0;
+	overflow: hidden;
+	font-size: 14px;
+	background: transparent;
+	font-family: inherit;
+	border: none;
+	outline: none;
+	resize: none;
+	height:48px;
+	line-height:24px;
+	border-bottom: 1px solid #e7eaf1;
+	color:#8590a6;
+	width:90%;
+	margin-top:10px;
+
+}
+.accountPass {
+	padding: 0;
+	overflow: hidden;
+	font-size: 14px;
+	background: transparent;
+	font-family: inherit;
+	border: none;
+	outline: none;
+	resize: none;
+	height:48px;
+	line-height:24px;
+	border-bottom: 1px solid #e7eaf1;
+	color:#8590a6;
+	float:left;
+	width:90%;
+	margin-top:10px;
+	vertical-align: middle;
+}

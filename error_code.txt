@@ -1,0 +1,10 @@
+error_code:[
+    0=>'ok',
+    1=>'username empty',
+    2=>'password empty',
+    3=>'username too short',
+    4=>'password too short',
+    5=>'user not exists or wrong password',
+    6=>'user name should just contain alphabet and digit and started with a alphabet',
+    7=>'contains not allowed word',
+    ]
