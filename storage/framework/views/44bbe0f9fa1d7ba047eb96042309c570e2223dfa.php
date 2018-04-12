@@ -46,12 +46,11 @@
                 <th><?php echo e($user->username); ?></th>
             </tr>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        <?php echo $users->render(); ?>
-
         <?php else: ?>
         <p>users not found</p>
         <?php endif; ?>
     </table>
+    <?php echo $users->render(); ?>
 
 <?php $__env->stopSection(); ?>
 

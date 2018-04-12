@@ -47,10 +47,9 @@
                 <th>{{$user->username}}</th>
             </tr>
         @endforeach
-        {!! $users->render() !!}
         @else
         <p>users not found</p>
         @endif
     </table>
-
+    {!! $users->render() !!}
 @endsection
