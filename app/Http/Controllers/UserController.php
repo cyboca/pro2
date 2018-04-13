@@ -14,7 +14,11 @@ class UserController extends Controller
     public function login(){
         $user=new \App\User();
         $result=$user->login();
-        return redirect('index')->with($result);
+        if($result['type']=='user')
+//            return redirect('index')->with($result);
+            return redirect('index');
+        else
+            return redirect('test');
     }
 
     public function logout(){

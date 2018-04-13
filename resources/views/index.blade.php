@@ -31,7 +31,6 @@
         {{Session::get('msg')}}
     </div>
 @endif
-
 @section('content')
     <table class="bordered">
         <tr>

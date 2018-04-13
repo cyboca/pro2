@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Request;
+use DB;
 
 class User extends Authenticatable
 {
@@ -27,6 +28,18 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+//    /* check login user or manager */
+//    public function check_type(){
+//        $type=Request::get('demo-radio');
+//        if($type==0){
+//            $result=$this->user_login();
+//            return $result;
+//        }else{
+//            $result=$this->manager_login();
+//            return $result;
+//        }
+//    }
 
     /* get deployed websites */
     public function get_deployed_websites()
@@ -89,6 +102,7 @@ class User extends Authenticatable
     {
         /* check username and password empty */
         $user_passwd_exists = $this->user_passwd_not_empty();
+        $type=Request::get('demo-radio');
 
         if ($user_passwd_exists['status'] != 0) {
             return ['status' => $user_passwd_exists['status'], 'msg' => $user_passwd_exists['msg']];
@@ -99,16 +113,30 @@ class User extends Authenticatable
         $password = $user_passwd_exists['password'];
         $encrypt_passwd = md5($password);
 
-        /* check user and password in database */
-        if ($this->where([
-            ['username', '=', $username],
-            ['password', '=', $encrypt_passwd]
-        ])->first()) {
-            /* if username and password not empty length good ,set session */
-            session()->put('username', $user_passwd_exists['username']);
-            return ['status' => 0, 'msg' => 'ok'];
-        } else {
-            return ['status' => 5, 'msg' => 'user not exists or wrong password'];
+        if($type==1){
+            /* check user and password in database */
+            if ($this->where([
+                ['username', '=', $username],
+                ['password', '=', $encrypt_passwd]
+            ])->first()) {
+                /* if username and password not empty length good ,set session */
+                session()->put('username', $username);
+                session()->put('type',$type);
+                return ['status' => 0, 'msg' => 'ok','type'=>'user'];
+            } else {
+                return ['status' => 5, 'msg' => 'user not exists or wrong password'];
+            }
+        }else{
+            if(DB::table('managers')->where([
+                ['username','=',$username],
+                ['password','=',$encrypt_passwd]
+            ])->first()){
+                session()->put('username',$username);
+                session()->put('type',$type);
+                return ['status'=>0,'msg'=>'ok','type'=>'manager'];
+            }else{
+                return ['status'=>5,'msg'=>'user not exists or wrong password'];
+            }
         }
 
     }
