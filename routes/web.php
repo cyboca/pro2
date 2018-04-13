@@ -15,10 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', 'HomeController@index');
-//Route::get('/home',function (){
-//   return view('test');
-//});
+Route::group(['middleware'=>'checklogin'],function (){
+    Route::get('home','HomeController@index');
+});
 
 Route::get('/index',"IndexController@index");
 
@@ -27,3 +26,21 @@ Route::post('/login','UserController@login');
 Route::get('/logout','UserController@logout');
 
 Route::post('/register','UserController@register');
+
+Route::get('/test','TestController@index');
+
+/* page to input access code */
+Route::get('admin','AdminController@index');
+
+/* page to get the post and login */
+Route::post('access','AdminController@login');
+
+/* backend pages use admin check */
+Route::group(['middleware'=>'admincheck'],function (){
+    Route::get('backend','AdminController@backend');
+    Route::get('managers','AdminController@managers');
+    Route::get('space','AdminController@space');
+    Route::get('adminlogout','AdminController@logout');
+});
+
+Route::get('managerlist','AdminController@test');

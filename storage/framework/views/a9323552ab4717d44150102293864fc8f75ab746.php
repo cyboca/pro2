@@ -1,5 +1,11 @@
-<?php echo e(Session::get('username')); ?>
+<p><?php echo e(Session::get('username')); ?></p>
+<p><?php echo e(Session::get('password')); ?></p>
+<p><?php echo e(Session::get('type')); ?></p>
+<?php if(Session::get('status')!=0): ?>
+    <div class="alert">
+        <?php echo e(Session::get('msg')); ?>
 
-<?php echo e(Session::get('password')); ?>
+    </div>
+<?php endif; ?>
 
-<?php echo e($path); ?>
+<p><?php echo e(session('error')); ?></p>

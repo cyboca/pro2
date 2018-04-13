@@ -19,6 +19,15 @@
 
                 <input type="text" value="" name="username" class="Input" placeholder="用户名">
                 <input type="password" value="" name="password" class="Input" placeholder="密码">
+                <label>
+                    <input type="radio" name="demo-radio" value="1">
+                    <span class="demo-radioInput"></span>用户
+                </label>
+                <label>
+                    <input type="radio" name="demo-radio" value="0">
+                    <span class="demo-radioInput"></span>管理员
+                </label>
+
                 <p onClick="signInRegister()" id="signInRegister" class="noAccount">没有账号，点击注册</p>
                 <p class="forgetPassword">忘记密码？</p>
                 <input type="submit" name="submit" value="登录" class="signInButton"/>

@@ -30,7 +30,6 @@
 
     </div>
 <?php endif; ?>
-
 <?php $__env->startSection('content'); ?>
     <table class="bordered">
         <tr>
