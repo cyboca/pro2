@@ -28,9 +28,18 @@ class AdminController extends Controller
     }
 
     public function backend(){
+
         $manager=new \App\Manager();
+        /* count managers */
         $managers=$manager->get_managers();
-        return view('backend',['managers'=>$managers]);
+
+        $user=new \App\User();
+        /* count users */
+        $users=$user->get_users();
+
+        $sizes=$manager->get_size();
+
+        return view('backend',['managers'=>$managers,'users'=>$users,'sizes'=>$sizes]);
     }
 
     public function managers(){
@@ -50,7 +59,7 @@ class AdminController extends Controller
     /* print managers list */
     public function test(){
         $manager=new \App\Manager();
-        $result=$manager->get_all_managers();
-        return view('managerlist',$result);
+        $result=$manager->get_size();
+        return view('test',['sizes'=>$result]);
     }
 }

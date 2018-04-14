@@ -27,7 +27,11 @@ Route::get('/logout','UserController@logout');
 
 Route::post('/register','UserController@register');
 
-Route::get('/test','TestController@index');
+//Route::get('/test','AdminController@test');
+Route::get('/test',function (){
+    $manager=new \App\Manager();
+    return $manager->get_size();
+});
 
 /* page to input access code */
 Route::get('admin','AdminController@index');
@@ -42,5 +46,3 @@ Route::group(['middleware'=>'admincheck'],function (){
     Route::get('space','AdminController@space');
     Route::get('adminlogout','AdminController@logout');
 });
-
-Route::get('managerlist','AdminController@test');

@@ -10,14 +10,15 @@
             <h2><a class="menua" href="index">Main Page</a></h2>
             <br/>
             <ul id="sideul">
-                @if(Session::get('username')!="")
+                @if(Session::get('check') == 1)
                     {{--<a href="home"><li>welcome {{Session::get('username')}}</li></a>--}}
                     <li id="showaccounts">show my accounts</li>
                     <li id="deploywebsite">deploy my website</li>
                     <a href="logout"><li>logout</li></a>
                 @else
-                    <li onclick="showSignInWindow()">login</li>
-                    <li onclick="showRegisterWindow()">register</li>
+                    <li>show users</li>
+                    <li>manager users</li>
+                    <a href="logout"><li>logout</li></a>
                 @endif
             </ul>
         </aside>

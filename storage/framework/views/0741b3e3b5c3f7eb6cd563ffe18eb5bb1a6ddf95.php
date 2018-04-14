@@ -8,14 +8,15 @@
             <h2><a class="menua" href="index">Main Page</a></h2>
             <br/>
             <ul id="sideul">
-                <?php if(Session::get('username')!=""): ?>
+                <?php if(Session::get('check') == 1): ?>
                     
                     <li id="showaccounts">show my accounts</li>
                     <li id="deploywebsite">deploy my website</li>
                     <a href="logout"><li>logout</li></a>
                 <?php else: ?>
-                    <li onclick="showSignInWindow()">login</li>
-                    <li onclick="showRegisterWindow()">register</li>
+                    <li>show users</li>
+                    <li>manager users</li>
+                    <a href="logout"><li>logout</li></a>
                 <?php endif; ?>
             </ul>
         </aside>

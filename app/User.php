@@ -121,7 +121,7 @@ class User extends Authenticatable
             ])->first()) {
                 /* if username and password not empty length good ,set session */
                 session()->put('username', $username);
-                session()->put('type',$type);
+                session()->put('check',1);
                 return ['status' => 0, 'msg' => 'ok','type'=>'user'];
             } else {
                 return ['status' => 5, 'msg' => 'user not exists or wrong password'];
@@ -132,7 +132,7 @@ class User extends Authenticatable
                 ['password','=',$encrypt_passwd]
             ])->first()){
                 session()->put('username',$username);
-                session()->put('type',$type);
+                session()->put('check',0);
                 return ['status'=>0,'msg'=>'ok','type'=>'manager'];
             }else{
                 return ['status'=>5,'msg'=>'user not exists or wrong password'];
@@ -144,7 +144,7 @@ class User extends Authenticatable
     /* user logout */
     public function logout()
     {
-        session()->forget('username');
+        session()->flush();
     }
 
     /* user register func */
@@ -172,4 +172,17 @@ class User extends Authenticatable
         $this->insert(['username'=>$username,'password'=>$encrypt_pass,'decrypt_pass'=>$password]);
         return ['status'=>0,'msg'=>'insert successed'];
     }
+
+    /* count users */
+    public function get_users(){
+        $users=$this->count('*');
+        return $users;
+    }
+
+    /* get all users in space */
+    public function users_in_space($space){
+        $users=$this->where('space',$space)->get();
+        return $users;
+    }
+
 }

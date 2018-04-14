@@ -16,7 +16,10 @@ class CheckLogin
     public function handle($request, Closure $next)
     {
         if(!session('username')){
-            return redirect('index');
+            if(session()->get('type')==1)
+                return redirect('index');
+            else
+                return redirect('test');
         }
         return $next($request);
     }

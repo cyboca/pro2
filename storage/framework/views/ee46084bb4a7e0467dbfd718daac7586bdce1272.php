@@ -4,6 +4,7 @@
     <link type="text/css" rel="stylesheet" href="<?php echo e(URL::asset('/css/table.css')); ?>"/>
     <link type="text/css" rel="stylesheet" href="<?php echo e(URL::asset('/css/menu.css')); ?>">
     <link type="text/css" rel="stylesheet" href="<?php echo e(URL::asset('/css/pagination.css')); ?>">
+    <link type="text/css" rel="stylesheet" href="<?php echo e(URL::asset('/css/reset.css')); ?>">
     <script type="text/javascript" src="<?php echo e(URL::asset('/js/clickEvent.js')); ?>" charset="utf-8"></script>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
@@ -20,7 +21,7 @@
                 <input type="text" value="" name="username" class="Input" placeholder="用户名">
                 <input type="password" value="" name="password" class="Input" placeholder="密码">
                 <label>
-                    <input type="radio" name="demo-radio" value="1">
+                    <input type="radio" name="demo-radio" value="1" checked="checked">
                     <span class="demo-radioInput"></span>用户
                 </label>
                 <label>

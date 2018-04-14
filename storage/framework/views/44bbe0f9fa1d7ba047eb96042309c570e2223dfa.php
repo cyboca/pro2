@@ -17,7 +17,7 @@
                 <?php endif; ?>
             </ul>
         </aside>
-        <div id='wrap'>
+        <div id='wrap' class="alert">
             <label class="menulabel" id='sideMenuControl' for='sidemenu'>≡</label>
             <!--for 属性规定 label 与哪个表单元素绑定，即将这个控制侧边栏进出的按钮与checkbox绑定-->
         </div>
@@ -26,8 +26,22 @@
 
 <?php if(Session::get('status')!=0): ?>
     <div class="alert">
-        <?php echo e(Session::get('msg')); ?>
+        <input class="fire-check" type="checkbox" checked="checked">
+        <section>
+            <div class="tn-box tn-box-color-1">
+                <p><?php echo e(Session::get('msg')); ?></p>
+                <div class="tn-progress"></div>
+            </div>
+        </section>
+    </div>
+    <?php else: ?>
+    <div class="alert">
+        <input class="fire-check" type="checkbox">
+        <section>
+            <div class="tn-box tn-box-color-1">
 
+            </div>
+        </section>
     </div>
 <?php endif; ?>
 <?php $__env->startSection('content'); ?>
