@@ -42,7 +42,9 @@ Route::post('access','AdminController@login');
 /* backend pages use admin check */
 Route::group(['middleware'=>'admincheck'],function (){
     Route::get('backend','AdminController@backend');
-    Route::get('managers','AdminController@managers');
+    Route::get('managers','ManagerController@index');
     Route::get('space','AdminController@space');
     Route::get('adminlogout','AdminController@logout');
 });
+
+Route::post('managerregister','ManagerController@register');

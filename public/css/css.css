@@ -306,3 +306,25 @@ html{
 	margin-top:10px;
 	vertical-align: middle;
 }
+.managerRegisterInterface{
+	height:354px;
+	width:400px;
+	position:fixed;
+	top:50%;
+	left:50%;
+	margin-top:-177px;
+	margin-left:-200px;
+	background:#ffffff;
+	z-index:999;
+	box-shadow: 0 5px 20px 0 rgba(0,34,77,.5);
+}
+
+.managerRegisterInterface h1{
+	height:90px;
+	width:100%;
+	line-height:90px;
+	background:#00aeff;
+	color:#ffffff;
+	text-align:center;
+	font-size:32px;
+}

@@ -63,8 +63,10 @@
         <p>users not found</p>
         <?php endif; ?>
     </table>
-    <?php echo $users->render(); ?>
+    <div class="paginationdiv">
+        <?php echo $users->render(); ?>
 
+    </div>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('temp', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

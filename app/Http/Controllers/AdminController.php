@@ -18,8 +18,8 @@ class AdminController extends Controller
         return view('admin');
     }
     public function login(){
-       $manager=new \App\Manager();
-       $result=$manager->login();
+       $admin=new \App\Admin();
+       $result=$admin->login();
        if($result['status']!=0){
            return redirect('test')->with('error','wrong code');
        }else{
@@ -42,11 +42,11 @@ class AdminController extends Controller
         return view('backend',['managers'=>$managers,'users'=>$users,'sizes'=>$sizes]);
     }
 
-    public function managers(){
-        $manager=new \App\Manager();
-        $result=$manager->get_all_managers();
-        return view('managers',$result);
-    }
+//    public function managers(){
+//        $manager=new \App\Manager();
+//        $result=$manager->get_all_managers();
+//        return view('managers',$result);
+//    }
 
     public function space(){
         return view('space');

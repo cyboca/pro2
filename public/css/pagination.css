@@ -1,3 +1,7 @@
+.paginationdiv{
+    position: absolute;
+    top: 800px;
+}
 ul.pagination {
     display: inline-block;
     padding: 0;

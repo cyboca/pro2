@@ -64,14 +64,14 @@ function registerSignIn() {
     var float1 = document.getElementById("floatTop");
     var float2 = document.getElementById("floatTopRegister");
     float2.style.display = "none";
-    float1.style.display = "block"
+    float1.style.display = "block";
 }
 
 function signInRegister() {
     var float1 = document.getElementById("floatTop");
     var float2 = document.getElementById("floatTopRegister");
     float2.style.display = "block";
-    float1.style.display = "none"
+    float1.style.display = "none";
 }
 
 function jumpto() {
@@ -120,6 +120,21 @@ function ftpchange() {
         ps.type = "password";
         img.src = "../img/visible.png";
     }
+}
+
+function showAddUser() {
+    var float=document.getElementById('addUser');
+    var main=document.getElementById('main');
+
+    float.style.display = "block";
+    main.style.webkitFilter = "blur(3px)";
+}
+
+function managerCloseWindow() {
+    var float1 = document.getElementById("addUser");
+    var main = document.getElementById("main");
+    float1.style.display = "none";
+    main.style.webkitFilter = "";
 }
 
 function test() {

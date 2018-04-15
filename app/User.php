@@ -169,6 +169,11 @@ class User extends Authenticatable
             return ['status' => $user_passwd_check['status'], 'msg' => $user_passwd_check['msg']];
         }
 
+        //check if user already exists
+        if($this->where('username',$username)->first()){
+            return ['status'=>9,'msg'=>'user already exists'];
+        }
+
         $this->insert(['username'=>$username,'password'=>$encrypt_pass,'decrypt_pass'=>$password]);
         return ['status'=>0,'msg'=>'insert successed'];
     }

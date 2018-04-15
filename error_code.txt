@@ -8,4 +8,5 @@ error_code:[
     6=>'user name should just contain alphabet and digit and started with a alphabet',
     7=>'contains not allowed word',
     8=>'wrong code',
+    9=>'user alraady exists',
     ]

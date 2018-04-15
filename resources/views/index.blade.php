@@ -65,5 +65,7 @@
         <p>users not found</p>
         @endif
     </table>
-    {!! $users->render() !!}
+    <div class="paginationdiv">
+        {!! $users->render() !!}
+    </div>
 @endsection
