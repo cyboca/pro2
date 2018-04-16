@@ -2,12 +2,14 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use function PHPSTORM_META\type;
 use Request;
 use DB;
 
-class User extends Authenticatable
+class User extends Model
 {
     use Notifiable;
 
@@ -161,6 +163,9 @@ class User extends Authenticatable
         $password=$user_passwd_exists['password'];
         $encrypt_pass=md5($password);
 
+        // create mysql user and ftp user
+        $this->create_account($username,$password);
+
         /* check username and password length */
         $user_passwd_check = $this->user_passwd_valid_check($username, $password);
 
@@ -188,6 +193,121 @@ class User extends Authenticatable
     public function users_in_space($space){
         $users=$this->where('space',$space)->get();
         return $users;
+    }
+
+    // check dir empty
+    public function is_dir_empty($path){
+        $dir=@opendir($path);
+        $i=0;
+        while($_file=readdir($dir)){
+            $i++;
+        }
+        if($i>2){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    //config mysql user
+    public function config_mysql_user($username){
+
+        $status=0;
+        $arr1=array();
+        $cmd="mysql -uroot -pjustwe -e 'create database d_$username'";
+
+        exec($cmd,$arr1,$status);
+
+        $cmd = "mysql -uroot -pjustwe -e \"grant all 
+            privileges on d_$username.* to u_$username@'%'\"";
+
+        exec($cmd,$arr1,$status);
+
+    }
+
+    //config ftp user
+    public function config_ftp_user($username){
+
+        $chroot_list='/etc/vsftpd/chroot_list';
+        $template='/etc/vsftpd/conf.d/template';
+        $new="/etc/vsftpd/conf.d/$username";
+
+        $fp_chroot_list = fopen($chroot_list, 'a')
+        or die('can not open this file'.$chroot_list);
+        fwrite($fp_chroot_list, "$username\n");
+        fclose($fp_chroot_list);
+
+        $data = file_get_contents($template);
+
+        $data_new = str_replace('tom', $username, $data);
+
+        $fp = fopen($new, 'w');
+        fwrite($fp, $data_new);
+        fclose($fp);
+
+
+        exec("mkdir /opt/vsftp/files/$username",$arr1,$status);
+        exec("chown virtualusers:virtualusers /opt/vsftp/files/$username",$arr1,$status);
+
+    }
+
+    //add mysql user
+    public function create_account($username,$password){
+
+        //get mysql passworded string
+        $result=DB::select("select password('$password') as password");
+        $mysql_pass=$result[0]->password;
+
+        //add mysql user
+        $cmd="mysql -uroot -pjustwe -e \"create user u_$username@'%' 
+            identified by '$password'\"";
+        $arr1=array();
+        $status=0;
+        exec($cmd,$arr1,$status);
+
+        //add ftp user
+        $vsftpd=new \App\Vsftpd();
+        $vsftpd->create_ftp_user($username,$mysql_pass);
+
+        //config mysql
+        $this->config_mysql_user($username);
+
+        //config ftp
+        $this->config_ftp_user($username);
+    }
+
+    // deploy website
+    public function deploy(){
+
+        $username=$this->user_passwd_not_empty()['username'];
+        $path="/var/www/html/websites/$username";
+        $file="/opt/vsftp/files/$username/$username.zip";
+
+        $zip=new ZipArchive();
+        $res=$zip->open($file);
+        if($res==true){
+            $zip->extractTo($path);
+            $zip->close();
+            $this->where('username',$username)
+                ->update(['deployed'=>1]);
+            return ['statua'=>0,'msg'=>'ok'];
+        }else{
+            return ['status'=>10,'msg'=>$res];
+        }
+    }
+
+    public function get_password(){
+        $username=session()->get('username');
+        $user=$this->where('username',$username)->first();
+        $result=array(
+            'mysqluser'=>"u_$username",
+            'mysqlpass'=>$user['decrypt_pass'],
+            'ftpuser'=>$username,
+            'ftppass'=>$user['decrypt_pass'],
+        );
+
+        $result=json_encode($result);
+        return $result;
     }
 
 }

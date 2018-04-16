@@ -1,6 +1,6 @@
 .paginationdiv{
-    position: absolute;
-    top: 800px;
+    position: relative;
+    top: 80%;
 }
 ul.pagination {
     display: inline-block;

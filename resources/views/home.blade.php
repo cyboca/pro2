@@ -2,6 +2,26 @@
 
 @section('title', 'my home')
 
+@section('divs')
+    @parent
+    <div id="accounts" class="floatTop">
+        <div class="shadow"></div>
+        <img id="closeButton" onClick="closeaccounts()" class="close" src="{{URL::asset('/img/close_black.png')}}"/>
+        <div class="signInterface">
+            <h1>accounts</h1>
+            <div class="inputGroup">
+                <input readonly="readonly" class="accountUser" id="mysqluser" value="tom">
+                <input id="mysqlpass" readonly="readonly" type="password" class="accountPass" value="mysql password">
+                <img id="mysqlvisible" class="visible" src="{{URL::asset('/img/visible.png')}}" onclick="mysqlchange()"/>
+
+                <input readonly="readonly" class="accountUser" id="ftpuser" value="tom">
+                <input id="ftppass" readonly="readonly" type="password" class="accountPass" value="ftp password">
+                <img id="ftpvisible" class="visible" src="{{URL::asset('/img/visible.png')}}" onclick="ftpchange()"/>
+            </div>
+        </div>
+    </div>
+@endsection
+
 @section('sidebar')
     @parent
     <div>

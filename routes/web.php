@@ -17,6 +17,11 @@ Route::get('/', function () {
 
 Route::group(['middleware'=>'checklogin'],function (){
     Route::get('home','HomeController@index');
+    Route::get('accounts',function (){
+        $user=new \App\User();
+        $result=$user->get_password();
+        return $result;
+    });
 });
 
 Route::get('/index',"IndexController@index");
@@ -28,10 +33,12 @@ Route::get('/logout','UserController@logout');
 Route::post('/register','UserController@register');
 
 //Route::get('/test','AdminController@test');
-Route::get('/test',function (){
-    $manager=new \App\Manager();
-    return $manager->get_size();
-});
+//Route::get('/test',function (){
+//    $manager=new \App\Manager();
+//    return $manager->get_size();
+//});
+
+
 
 /* page to input access code */
 Route::get('admin','AdminController@index');

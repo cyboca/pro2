@@ -29,4 +29,15 @@ class UserController extends Controller
         $result=$user->register();
         return redirect('index')->with($result);
     }
+
+    public function showaccounts(){
+        $user=new \App\User();
+    }
+
+    public function getpassword(){
+        $user=new \App\User();
+        $result=$user->get_password();
+        return redirect('test')->with($result);
+    }
+
 }

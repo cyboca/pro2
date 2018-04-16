@@ -9,4 +9,5 @@ error_code:[
     7=>'contains not allowed word',
     8=>'wrong code',
     9=>'user alraady exists',
+    10=>'deploy failed',
     ]

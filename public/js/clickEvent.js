@@ -1,11 +1,11 @@
 // JavaScript Document
 $(document).ready(function () {
     $("#showaccounts").click(function () {
-        $.getJSON("hint.php", function (data) {
-                $("#mysqluser").val(data.mysqluser);
-                $("#mysqlpass").val(data.mysqlpass);
-                $("#ftpuser").val(data.ftpuser);
-                $("#ftppass").val(data.ftppass);
+        $.getJSON("accounts", function (data) {
+            $("#mysqluser").val(data.mysqluser);
+            $("#mysqlpass").val(data.mysqlpass);
+            $("#ftpuser").val(data.ftpuser);
+            $("#ftppass").val(data.ftppass);
         });
         $("#accounts").css('display','block');
         $("#main").css('webkitFilter',"blur(3px)");
