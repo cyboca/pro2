@@ -31,7 +31,11 @@
                 <?php if(Session::get('check') == 1): ?>
                     
                     <li id="showaccounts">show my accounts</li>
-                    <li id="deploywebsite">deploy my website</li>
+                        <?php if($space!=0): ?>
+                        <a href="deploy"><li id="deploywebsite">deploy my website</li></a>
+                        <?php else: ?>
+                            <li id="addspace">add a space</li>
+                        <?php endif; ?>
                     <a href="logout"><li>logout</li></a>
                 <?php else: ?>
                     <li>show users</li>
@@ -46,6 +50,27 @@
         </div>
     </div>
 <?php $__env->stopSection(); ?>
+
+<?php if(Session::get('status')>-1): ?>
+    <div class="alert">
+        <input class="fire-check" type="checkbox" checked="checked">
+        <section>
+            <div class="tn-box tn-box-color-1">
+                <p><?php echo e(Session::get('msg')); ?></p>
+                <div class="tn-progress"></div>
+            </div>
+        </section>
+    </div>
+<?php else: ?>
+    <div class="alert">
+        <input class="fire-check" type="checkbox">
+        <section>
+            <div class="tn-box tn-box-color-1">
+
+            </div>
+        </section>
+    </div>
+<?php endif; ?>
 
 <?php $__env->startSection('content'); ?>
     <div class="iframe-wrapper">

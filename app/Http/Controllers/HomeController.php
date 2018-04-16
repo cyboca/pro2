@@ -9,12 +9,11 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
+        $user=new \App\User();
         $username=$request->session()->get('username');
-        $path="http://192.168.27.210/websites/$username";
-        if(file_exists($path."/index.html")){
-            return view('home',['path'=>$path]);
-        }else{
-            return view('home',['path'=>$path]);
-        }
+
+        $space=$user->check_space();
+        return view('home',$space);
+
     }
 }

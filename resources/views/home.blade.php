@@ -33,7 +33,11 @@
                 @if(Session::get('check') == 1)
                     {{--<a href="home"><li>welcome {{Session::get('username')}}</li></a>--}}
                     <li id="showaccounts">show my accounts</li>
-                    <li id="deploywebsite">deploy my website</li>
+                        @if($space!=0)
+                        <a href="deploy"><li id="deploywebsite">deploy my website</li></a>
+                        @else
+                            <li id="addspace">add a space</li>
+                        @endif
                     <a href="logout"><li>logout</li></a>
                 @else
                     <li>show users</li>
@@ -48,6 +52,27 @@
         </div>
     </div>
 @endsection
+
+@if(Session::get('status')>-1)
+    <div class="alert">
+        <input class="fire-check" type="checkbox" checked="checked">
+        <section>
+            <div class="tn-box tn-box-color-1">
+                <p>{{Session::get('msg')}}</p>
+                <div class="tn-progress"></div>
+            </div>
+        </section>
+    </div>
+@else
+    <div class="alert">
+        <input class="fire-check" type="checkbox">
+        <section>
+            <div class="tn-box tn-box-color-1">
+
+            </div>
+        </section>
+    </div>
+@endif
 
 @section('content')
     <div class="iframe-wrapper">

@@ -40,4 +40,10 @@ class UserController extends Controller
         return redirect('test')->with($result);
     }
 
+    public function deploy(){
+        $user=new \App\User();
+        $result=$user->deploy();
+
+        return redirect('home')->with($result);
+    }
 }

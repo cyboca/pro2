@@ -12,6 +12,7 @@ use DB;
 class User extends Model
 {
     use Notifiable;
+    public $timestamps=false;
 
     /**
      * The attributes that are mass assignable.
@@ -279,23 +280,28 @@ class User extends Model
     // deploy website
     public function deploy(){
 
-        $username=$this->user_passwd_not_empty()['username'];
+        $username=session()->get('username');
         $path="/var/www/html/websites/$username";
         $file="/opt/vsftp/files/$username/$username.zip";
 
-        $zip=new ZipArchive();
+        if(!is_file($file)){
+            return ['status'=>11,'msg'=>'file not exist!'];
+        }
+
+        $zip=new \ZipArchive();
         $res=$zip->open($file);
         if($res==true){
             $zip->extractTo($path);
             $zip->close();
             $this->where('username',$username)
                 ->update(['deployed'=>1]);
-            return ['statua'=>0,'msg'=>'ok'];
+            return ['status'=>0,'msg'=>'deploy success'];
         }else{
             return ['status'=>10,'msg'=>$res];
         }
     }
 
+    //get mysql ftp password
     public function get_password(){
         $username=session()->get('username');
         $user=$this->where('username',$username)->first();
@@ -308,6 +314,15 @@ class User extends Model
 
         $result=json_encode($result);
         return $result;
+    }
+
+    //check add space
+    public function check_space(){
+        $username=session()->get('username');
+        $space=$this->where('username',$username)
+            ->select('space')->first();
+
+        return ['space'=>$space['space']];
     }
 
 }

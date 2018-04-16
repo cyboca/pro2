@@ -22,6 +22,7 @@ Route::group(['middleware'=>'checklogin'],function (){
         $result=$user->get_password();
         return $result;
     });
+    Route::get('deploy','UserController@deploy');
 });
 
 Route::get('/index',"IndexController@index");
