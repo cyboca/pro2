@@ -46,4 +46,12 @@ class UserController extends Controller
 
         return redirect('home')->with($result);
     }
+
+    public function chosespace(){
+        $user=new \App\User();
+        $user->chosespace();
+
+        $result=$user->chosespace();
+        return redirect('home')->with($result);
+    }
 }

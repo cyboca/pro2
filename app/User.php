@@ -325,4 +325,14 @@ class User extends Model
         return ['space'=>$space['space']];
     }
 
+    // chose space
+    public function chosespace(){
+        $space=Request::get('chosedspace');
+        $username=session()->get('username');
+
+        $this->where('username',$username)
+            ->update(['space'=>$space]);
+        return ['status'=>0,'msg'=>'add space success'];
+    }
+
 }

@@ -22,6 +22,7 @@
 
 <?php $__env->startSection('sidebar'); ?>
     ##parent-placeholder-19bd1503d9bad449304cc6b4e977b74bac6cc771##
+
     <div>
         <input type='checkbox' id='sidemenu'>
         <aside>
@@ -34,7 +35,7 @@
                         <?php if($space!=0): ?>
                         <a href="deploy"><li id="deploywebsite">deploy my website</li></a>
                         <?php else: ?>
-                            <li id="addspace">add a space</li>
+                            <li id="addspace" onclick="showspaces()">add a space</li>
                         <?php endif; ?>
                     <a href="logout"><li>logout</li></a>
                 <?php else: ?>
@@ -49,6 +50,8 @@
             <!--for 属性规定 label 与哪个表单元素绑定，即将这个控制侧边栏进出的按钮与checkbox绑定-->
         </div>
     </div>
+
+
 <?php $__env->stopSection(); ?>
 
 <?php if(Session::get('status')>-1): ?>
@@ -70,6 +73,27 @@
             </div>
         </section>
     </div>
+
+    <div id="selectdiv" class="floatTop">
+        <div class="shadow"></div>
+        <img id="closeButton" onClick="closespaces()" class="close" src="<?php echo e(URL::asset('/img/close_black.png')); ?>"/>
+        <div class="signInterface">
+            <h1>加入空间</h1>
+            <div class="inputGroup">
+                <form id="spaces" method="post" action="chosespace">
+                    <?php echo e(csrf_field()); ?>
+
+                    <select name="chosedspace">
+                        <?php $__currentLoopData = $managers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $manager): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($manager['id']); ?>"><?php echo e($manager['username']); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                    <button type="submit">确定</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 <?php endif; ?>
 
 <?php $__env->startSection('content'); ?>

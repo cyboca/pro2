@@ -10,17 +10,15 @@ $(document).ready(function () {
         $("#accounts").css('display','block');
         $("#main").css('webkitFilter',"blur(3px)");
     });
-    $("#deploywebsite").click(function () {
-        $.get("deploy.php",function (result) {
-            if(result=="yes"){
-                alert("deploy successed");
-                location.reload();
-            }else {
-                alert("deploy failed: "+result);
-            }
-        });
-    });
 });
+
+function showspaces() {
+    var spaces=document.getElementById("selectdiv");
+    var main=document.getElementById("main");
+
+    spaces.style.display="block";
+    main.style.webkitFilter = "blur(3px)";
+}
 
 function closeWindow() {
     var float1 = document.getElementById("floatTop");
@@ -38,11 +36,19 @@ function closeaccounts() {
     main.style.webkitFilter = "";
 }
 
+function closespaces() {
+    var spaces=document.getElementById("selectdiv");
+    var main=document.getElementById("main");
+
+    spaces.style.display="none";
+    main.style.webkitFilter="";
+}
+
 function showSignInWindow() {
     var float = document.getElementById("floatTop");
     var main = document.getElementById("main");
     float.style.display = "block";
-    main.style.webkitFilter = "blur(3px)"
+    main.style.webkitFilter = "blur(3px)";
 
 }
 

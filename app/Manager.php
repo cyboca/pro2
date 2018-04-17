@@ -83,6 +83,7 @@ class Manager extends Model
             return bcmul($a[0], bcpow(10, $a[1], $double), $double);
         }
     }
+
     // return manager array
     public function get_all_managers(){
 
@@ -196,4 +197,5 @@ class Manager extends Model
 
         return ['status'=>0,'msg'=>'insert successed'];
     }
+
 }

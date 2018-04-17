@@ -12,8 +12,11 @@ class HomeController extends Controller
         $user=new \App\User();
         $username=$request->session()->get('username');
 
+        $managers=new \App\Manager();
+        $result=$managers->get_all_managers();
+
         $space=$user->check_space();
-        return view('home',$space);
+        return view('home',$space,['managers'=>$result]);
 
     }
 }

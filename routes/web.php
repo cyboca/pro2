@@ -22,6 +22,11 @@ Route::group(['middleware'=>'checklogin'],function (){
         $result=$user->get_password();
         return $result;
     });
+    Route::get('spaces',function (){
+        $managers=new \App\Manager();
+        $result=$managers->get_all_managers();
+        return $result;
+    });
     Route::get('deploy','UserController@deploy');
 });
 
@@ -46,6 +51,8 @@ Route::get('admin','AdminController@index');
 
 /* page to get the post and login */
 Route::post('access','AdminController@login');
+
+Route::post('chosespace','UserController@chosespace');
 
 /* backend pages use admin check */
 Route::group(['middleware'=>'admincheck'],function (){

@@ -330,3 +330,9 @@ html{
 	text-align:center;
 	font-size:32px;
 }
+
+.selectdiv{
+	position: absolute;
+	top: 10px;
+	display: none;
+}

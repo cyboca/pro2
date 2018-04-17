@@ -21,4 +21,8 @@ class ManagerController extends Controller
         $result=$manager->register();
         return redirect('managers')->with($result);
     }
+
+    public function chosespace(){
+
+    }
 }

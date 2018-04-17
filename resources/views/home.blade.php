@@ -24,6 +24,7 @@
 
 @section('sidebar')
     @parent
+
     <div>
         <input type='checkbox' id='sidemenu'>
         <aside>
@@ -36,7 +37,7 @@
                         @if($space!=0)
                         <a href="deploy"><li id="deploywebsite">deploy my website</li></a>
                         @else
-                            <li id="addspace">add a space</li>
+                            <li id="addspace" onclick="showspaces()">add a space</li>
                         @endif
                     <a href="logout"><li>logout</li></a>
                 @else
@@ -51,6 +52,8 @@
             <!--for 属性规定 label 与哪个表单元素绑定，即将这个控制侧边栏进出的按钮与checkbox绑定-->
         </div>
     </div>
+
+
 @endsection
 
 @if(Session::get('status')>-1)
@@ -72,6 +75,26 @@
             </div>
         </section>
     </div>
+
+    <div id="selectdiv" class="floatTop">
+        <div class="shadow"></div>
+        <img id="closeButton" onClick="closespaces()" class="close" src="{{URL::asset('/img/close_black.png')}}"/>
+        <div class="signInterface">
+            <h1>加入空间</h1>
+            <div class="inputGroup">
+                <form id="spaces" method="post" action="chosespace">
+                    {{csrf_field()}}
+                    <select name="chosedspace">
+                        @foreach($managers as $manager)
+                            <option value="{{$manager['id']}}">{{$manager['username']}}</option>
+                        @endforeach
+                    </select>
+                    <button type="submit">确定</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endif
 
 @section('content')

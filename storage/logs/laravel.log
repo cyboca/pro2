@@ -11522,3 +11522,12 @@ Stack trace:
 [2018-04-16 13:54:24] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Access level to App\User::$timestamps must be public (as in class Illuminate\Database\Eloquent\Model)' in /var/www/html/pro2/app/User.php:13
 Stack trace:
 #0 {main}  
+[2018-04-17 09:17:50] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '}'' in /var/www/html/pro2/app/Manager.php:204
+Stack trace:
+#0 {main}  
+[2018-04-17 09:18:01] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '}'' in /var/www/html/pro2/app/Manager.php:204
+Stack trace:
+#0 {main}  
+[2018-04-17 09:18:05] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '}'' in /var/www/html/pro2/app/Manager.php:204
+Stack trace:
+#0 {main}  
