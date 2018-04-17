@@ -152,9 +152,31 @@ class Manager extends Model
             $percents=round($percents,2);
 
 
-            $result[]=['spacename'=>$space_name,'size'=>$size,'size_per'=>$percents];
+            $result[]=['spacename'=>$space_name,'size'=>$size,'size_per'=>$percents,'limit'=>$limit];
         }
         return $result;
+    }
+
+    // get used size
+    public function get_used_size($id){
+
+        $user=new \App\User();
+        $space=$this->where('id',$id)->first();
+        $limit=$space['limit'];
+
+        $users=$user->users_in_space($id);
+        $size=0;
+        foreach ($users as $user){
+            $path="/var/www/html/websites/".$user['username'];
+            $size+=$this->directory_size($path);
+        }
+
+        /* size Mb */
+        $size/=(1000*1000);
+        $size=round($size,2);
+
+        return ['used_size'=>$size,'limit'=>$limit];
+
     }
 
     // manager register

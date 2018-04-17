@@ -50,6 +50,7 @@
             <tr>
                 <th>租户</th>
                 <th>磁盘空间占用</th>
+                <th>磁盘总空间</th>
                 <th>额度</th>
             </tr>
 
@@ -57,6 +58,7 @@
                 <tr>
                     <th><?php echo e($manager['spacename']); ?></th>
                     <th><?php echo e($manager['size']); ?>Mb</th>
+                    <th><?php echo e($manager['limit']); ?>Mb</th>
                     <th><?php echo e($manager['size_per']); ?>%</th>
                 </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

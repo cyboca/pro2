@@ -10,3 +10,8 @@
 每个租户下仅允许添加50个用户，增加上限需联系管理员
 租户空间设置上限
 每个用户空间设置上限
+
+
+4.18
+租户删除 jquery select change
+租户空间修改 jquery select change

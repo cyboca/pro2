@@ -50,6 +50,7 @@
             <tr>
                 <th>租户</th>
                 <th>磁盘空间占用</th>
+                <th>磁盘总空间</th>
                 <th>额度</th>
             </tr>
 
@@ -57,6 +58,7 @@
                 <tr>
                     <th>{{$manager['spacename']}}</th>
                     <th>{{$manager['size']}}Mb</th>
+                    <th>{{$manager['limit']}}Mb</th>
                     <th>{{$manager['size_per']}}%</th>
                 </tr>
                 @endforeach

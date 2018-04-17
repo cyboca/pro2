@@ -59,7 +59,8 @@
                 <br/>
                 <ul id="sideul">
                     <li onclick="showAddUser()">create manager</li>
-                    <a href="deletemanager"><li>delete managers</li></a>
+                    <li onclick="showDeleteUser">delete managers</li>
+                    <li onclick="showModifyUser">modify maangers</li>
                     <a href="adminlogout"><li>logout</li></a>
                 </ul>
             </aside>

@@ -147,7 +147,8 @@ class User extends Model
     /* user logout */
     public function logout()
     {
-        session()->flush();
+        session()->forget('username');
+        session()->forget('check');
     }
 
     /* user register func */
@@ -284,15 +285,33 @@ class User extends Model
         $path="/var/www/html/websites/$username";
         $file="/opt/vsftp/files/$username/$username.zip";
 
+        $user=$this->where('username',$username)->first();
+        $id=$user['space'];
+
+        $space=new \App\Manager();
+        $result=$space->get_used_size($id);
+
+        $used=$result['used_size'];
+        $limit=$result['limit'];
+
         if(!is_file($file)){
             return ['status'=>11,'msg'=>'file not exist!'];
         }
 
-        $zip=new \ZipArchive();
-        $res=$zip->open($file);
-        if($res==true){
+        $filesize=filesize($file);
+        $filesize/=(1000*1000);
+
+        if($filesize+$username>=$limit){
+            return ['status'=>12,'msg'=>'space over use'];
+        }
+
+            $zip=new \ZipArchive();
+            $res=$zip->open($file);
+
             $zip->extractTo($path);
             $zip->close();
+
+            if($res==true){
             $this->where('username',$username)
                 ->update(['deployed'=>1]);
             return ['status'=>0,'msg'=>'deploy success'];
