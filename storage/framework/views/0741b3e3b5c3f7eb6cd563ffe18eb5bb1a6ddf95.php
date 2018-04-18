@@ -74,7 +74,7 @@
         </section>
     </div>
 
-    <div id="selectdiv" class="floatTop">
+    <div id="chosespacediv" class="floatTop">
         <div class="shadow"></div>
         <img id="closeButton" onClick="closespaces()" class="close" src="<?php echo e(URL::asset('/img/close_black.png')); ?>"/>
         <div class="signInterface">
@@ -84,8 +84,8 @@
                     <?php echo e(csrf_field()); ?>
 
                     <select name="chosedspace">
-                        <?php $__currentLoopData = $managers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $manager): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($manager['id']); ?>"><?php echo e($manager['username']); ?></option>
+                        <?php $__currentLoopData = $spaces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $space): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($space['id']); ?>"><?php echo e($space['username']); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                     <button type="submit">确定</button>

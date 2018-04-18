@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Session;
 use Request;
+use Illuminate\Support\Facades\Input;
 
 class AdminController extends Controller
 {
@@ -61,5 +62,24 @@ class AdminController extends Controller
         $manager=new \App\Manager();
         $result=$manager->get_size();
         return view('test',['sizes'=>$result]);
+    }
+
+    public function deletespace(){
+        $space=new \App\Manager();
+        $space->deletespace();
+
+        return redirect('managers')->with(['status'=>0,'msg'=>'delete space success']);
+    }
+
+    public function modifyspace(){
+        $space=new \App\Manager();
+        return $space->get_space();
+    }
+
+    public function modifyspacelimit(){
+        $space=new \App\Manager();
+        $result=$space->modifyspacelimit();
+
+        return redirect('managers')->with($result);
     }
 }

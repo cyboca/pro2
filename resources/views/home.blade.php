@@ -76,7 +76,7 @@
         </section>
     </div>
 
-    <div id="selectdiv" class="floatTop">
+    <div id="chosespacediv" class="floatTop">
         <div class="shadow"></div>
         <img id="closeButton" onClick="closespaces()" class="close" src="{{URL::asset('/img/close_black.png')}}"/>
         <div class="signInterface">
@@ -85,8 +85,8 @@
                 <form id="spaces" method="post" action="chosespace">
                     {{csrf_field()}}
                     <select name="chosedspace">
-                        @foreach($managers as $manager)
-                            <option value="{{$manager['id']}}">{{$manager['username']}}</option>
+                        @foreach($spaces as $space)
+                            <option value="{{$space['id']}}">{{$space['username']}}</option>
                         @endforeach
                     </select>
                     <button type="submit">确定</button>

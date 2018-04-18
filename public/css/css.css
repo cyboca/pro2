@@ -164,6 +164,30 @@ html{
 	z-index:999;
 	box-shadow: 0 5px 20px 0 rgba(0,34,77,.5);
 }
+
+.signInterface2{
+	height:380px;
+	width:400px;
+	position:fixed;
+	top:50%;
+	left:50%;
+	margin-top:-177px;
+	margin-left:-200px;
+	background:#ffffff;
+	z-index:999;
+	box-shadow: 0 5px 20px 0 rgba(0,34,77,.5);
+}
+
+.signInterface2 h1{
+	height:90px;
+	width:100%;
+	line-height:90px;
+	background:#00aeff;
+	color:#ffffff;
+	text-align:center;
+	font-size:32px;
+}
+
 .signInterface h1{
 	height:90px;
 	width:100%;
@@ -335,4 +359,20 @@ html{
 	position: absolute;
 	top: 10px;
 	display: none;
+}
+
+.spaceSelect{
+	width:80%;
+	height:40px;
+	font-size:18px;
+	line-height:40px;
+	margin-top:10px;
+}
+
+.spaceSubmit{
+	width:80%;
+	height:40px;
+	font-size:18px;
+	line-height:40px;
+	margin-top:10px;
 }

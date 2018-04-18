@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Input;
 use Request;
 
 class Manager extends Model
 {
+
+    public $timestamps=false;
     // check username and password not empty
     public function user_passwd_not_empty(){
 
@@ -220,4 +223,67 @@ class Manager extends Model
         return ['status'=>0,'msg'=>'insert successed'];
     }
 
+    // rmdir
+    public function removeDir($dirName){
+        if(! is_dir($dirName))
+        {
+            return false;
+        }
+        $handle = @opendir($dirName);
+        while(($file = @readdir($handle)) !== false)
+        {
+            if($file != '.' && $file != '..')
+            {
+                $dir = $dirName . '/' . $file;
+                is_dir($dir) ? $this->removeDir($dir) : @unlink($dir);
+            }
+        }
+        closedir($handle);
+
+        return rmdir($dirName) ;
+    }
+
+    // delete space
+    public function deletespace(){
+        $space=Request::get('deletespace');
+        $user=new \App\User();
+
+        $users=$user->users_in_space($space);
+
+        $result=array();
+        foreach($users as $user){
+            $path="/var/www/html/websites/".$user['username'];
+            $this->removeDir($path);
+        }
+
+        $this->where('id',$space)
+            ->delete();
+    }
+
+    //get space
+    public function get_space(){
+        $id=Input::get('id');
+        $space=$this->where('id',$id)->get();
+        $result=array(
+            'id'=>$space[0]->id,
+            'username'=>$space[0]->username,
+            'limit'=>$space[0]->limit,
+        );
+
+        return json_encode($result);
+    }
+
+    //modify space limit
+    public function modifyspacelimit(){
+        $limit=Request::get('modifyLimit');
+        $space=Request::get('modifySpace');
+
+        if($limit>=0 && $limit<=4000){
+            $this->where('id',$space)
+                ->update(['limit'=>$limit]);
+            return ['status'=>0,'msg'=>'space limit update success'];
+        }else{
+            return ['status'=>14,'msg'=>'space limit set too big'];
+        }
+    }
 }

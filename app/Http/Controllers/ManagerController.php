@@ -14,7 +14,7 @@ class ManagerController extends Controller
     public function index(){
         $managers=new \App\Manager();
         $result=$managers->get_all_managers();
-        return view('managers',['managers'=>$result]);
+        return view('managers',['spaces'=>$result]);
     }
     public function register(){
         $manager=new \App\Manager();

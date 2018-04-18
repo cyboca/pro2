@@ -15,7 +15,7 @@
     <div class="shadow"></div>
     <img id="closeButtonImg" onClick="managerCloseWindow()" class="close" src="<?php echo e(URL::asset('/img/close_black.png')); ?>"/>
     <div class="managerRegisterInterface reigsterInterface">
-        <h1>添加租户</h1>
+        <h1>添加空间</h1>
         <div class="inputGroup">
             <form name="register" method="post" action="managerregister">
                 <?php echo e(csrf_field()); ?>
@@ -31,7 +31,49 @@
         </div>
     </div>
 </div>
-<?php if(Session::get('status')!=0): ?>
+
+<div id="deletespacediv" class="floatTop">
+    <div class="shadow"></div>
+    <img id="closeButton" onClick="closeDeleteSpace()" class="close" src="<?php echo e(URL::asset('/img/close_black.png')); ?>"/>
+    <div class="signInterface">
+        <h1>删除空间</h1>
+        <div class="inputGroup">
+            <form id="spaces" method="post" action="deletespace" onsubmit="return confirmDeleteSpace()">
+                <?php echo e(csrf_field()); ?>
+
+                <select name="deletespace" class="spaceSelect">
+                    <?php $__currentLoopData = $spaces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $space): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($space['id']); ?>"><?php echo e($space['username']); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+                <button class="spaceSubmit" type="submit">确定</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="modifyspacediv" class="floatTop">
+    <div class="shadow"></div>
+    <img id="closeButton" onClick="closeModifySpace()" class="close" src="<?php echo e(URL::asset('/img/close_black.png')); ?>"/>
+    <div class="signInterface">
+        <h1>修改空间</h1>
+        <div class="inputGroup">
+            <form id="spaces" method="post" action="modifyspace" onsubmit="return confirmModifySpace()">
+                <?php echo e(csrf_field()); ?>
+
+                <select id="modifyspaceselect" name="modifySpace" class="spaceSelect">
+                    <?php $__currentLoopData = $spaces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $space): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($space['id']); ?>"><?php echo e($space['username']); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+                <input type="text" value="" id="modifyLimit" name="modifyLimit" class="Input" onkeypress="return event.keyCode>=48&&event.keyCode<=57" placeholder="空间 默认1000Mb">
+                <input type="submit" value="修改" name="submit" class="signInButton"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php if(Session::get('status')>-1): ?>
     <div class="alert">
         <input class="fire-check" type="checkbox" checked="checked">
         <section>
@@ -58,9 +100,9 @@
                 <h2><a class="menua" href="backend">Main Page</a></h2>
                 <br/>
                 <ul id="sideul">
-                    <li onclick="showAddUser()">create manager</li>
-                    <li onclick="showDeleteUser">delete managers</li>
-                    <li onclick="showModifyUser">modify maangers</li>
+                    <li onclick="showAddUser()">create space</li>
+                    <li onclick="showDeleteSpace()">delete space</li>
+                    <li onclick="showModifySpace()">modify space</li>
                     <a href="adminlogout"><li>logout</li></a>
                 </ul>
             </aside>
@@ -76,11 +118,11 @@
                     <th>租户</th>
                     <th>用户数</th>
                 </tr>
-                <?php $__currentLoopData = $managers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $manager): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php $__currentLoopData = $spaces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $space): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
-                        <th><?php echo e($manager['id']); ?></th>
-                        <th><?php echo e($manager['username']); ?></th>
-                        <th><?php echo e($manager['users']); ?></th>
+                        <th><?php echo e($space['id']); ?></th>
+                        <th><?php echo e($space['username']); ?></th>
+                        <th><?php echo e($space['users']); ?></th>
                     </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </table>

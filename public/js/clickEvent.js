@@ -10,10 +10,55 @@ $(document).ready(function () {
         $("#accounts").css('display','block');
         $("#main").css('webkitFilter',"blur(3px)");
     });
+    $("#modifyspaceselect").change(function () {
+        $.getJSON("modifyspace?"+$(this).val(),function (data) {
+            $("#modifyLimit").val(data.limit);
+        });
+    });
 });
 
+function showModifySpace() {
+    var space=document.getElementById("modifyspacediv");
+    var main=document.getElementById('main');
+
+    space.style.display="block";
+    main.style.webkitFilter="blur(3px)";
+}
+function showDeleteSpace() {
+    var space=document.getElementById('deletespacediv');
+    var main=document.getElementById('main');
+
+    space.style.display="block";
+    main.style.webkitFilter = "blur(3px)";
+}
+
+function confirmDeleteSpace() {
+    var msg='删除空间，该空间下所有用户部署的网站将全部删除';
+    if(confirm(msg)==true){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function closeModifySpace() {
+    var spaces=document.getElementById("modifyspacediv");
+    var main=document.getElementById("main");
+
+    spaces.style.display="none";
+    main.style.webkitFilter="";
+}
+
+function closeDeleteSpace() {
+    var spaces=document.getElementById("deletespacediv");
+    var main=document.getElementById("main");
+
+    spaces.style.display="none";
+    main.style.webkitFilter="";
+}
+
 function showspaces() {
-    var spaces=document.getElementById("selectdiv");
+    var spaces=document.getElementById("chosespacediv");
     var main=document.getElementById("main");
 
     spaces.style.display="block";
@@ -37,7 +82,7 @@ function closeaccounts() {
 }
 
 function closespaces() {
-    var spaces=document.getElementById("selectdiv");
+    var spaces=document.getElementById("chosespacediv");
     var main=document.getElementById("main");
 
     spaces.style.display="none";

@@ -10,4 +10,5 @@ error_code:[
     8=>'wrong code',
     9=>'user alraady exists',
     10=>'deploy failed',
+    14=>'space limit set too big'
     ]

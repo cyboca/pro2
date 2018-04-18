@@ -16,7 +16,7 @@ class HomeController extends Controller
         $result=$managers->get_all_managers();
 
         $space=$user->check_space();
-        return view('home',$space,['managers'=>$result]);
+        return view('home',$space,['spaces'=>$result]);
 
     }
 }

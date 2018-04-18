@@ -60,6 +60,9 @@ Route::group(['middleware'=>'admincheck'],function (){
     Route::get('managers','ManagerController@index');
     Route::get('space','AdminController@space');
     Route::get('adminlogout','AdminController@logout');
+    Route::post('deletespace','AdminController@deletespace');
+    Route::get('modifyspace','AdminController@modifyspace');
+    Route::post('modifyspace','AdminController@modifyspacelimit');
 });
 
 Route::post('managerregister','ManagerController@register');
