@@ -165,9 +165,6 @@ class User extends Model
         $password=$user_passwd_exists['password'];
         $encrypt_pass=md5($password);
 
-        // create mysql user and ftp user
-        $this->create_account($username,$password);
-
         /* check username and password length */
         $user_passwd_check = $this->user_passwd_valid_check($username, $password);
 
@@ -180,6 +177,9 @@ class User extends Model
         if($this->where('username',$username)->first()){
             return ['status'=>9,'msg'=>'user already exists'];
         }
+
+        // create mysql user and ftp user
+        $this->create_account($username,$password);
 
         $this->insert(['username'=>$username,'password'=>$encrypt_pass,'decrypt_pass'=>$password]);
         return ['status'=>0,'msg'=>'insert successed'];
@@ -301,7 +301,7 @@ class User extends Model
         $filesize=filesize($file);
         $filesize/=(1000*1000);
 
-        if($filesize+$username>=$limit){
+        if($filesize+$used>=$limit){
             return ['status'=>12,'msg'=>'space over use'];
         }
 

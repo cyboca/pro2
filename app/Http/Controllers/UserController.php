@@ -15,7 +15,10 @@ class UserController extends Controller
         $user=new \App\User();
         $result=$user->login();
 
-        return redirect('index')->with($result);
+        if($result['status']!=0)
+            return redirect('index')->with($result);
+        else
+            return redirect('home');
     }
 
     public function logout(){
