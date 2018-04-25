@@ -27,16 +27,19 @@ Route::group(['middleware'=>'checklogin'],function (){
         $result=$managers->get_all_managers();
         return $result;
     });
-    Route::get('deploy','UserController@deploy');
+    Route::get('buildWebsite','UserController@build');
+    Route::get('decompressFile','UserController@decompress');
+    Route::get('restartContainer','UserController@restartContainer');
+    Route::get('deleteContainer','UserController@deleteContainer');
 });
 
-Route::get('/index',"IndexController@index");
+Route::get('index',"IndexController@index");
 
-Route::post('/login','UserController@login');
+Route::post('login','UserController@login');
 
-Route::get('/logout','UserController@logout');
+Route::get('logout','UserController@logout');
 
-Route::post('/register','UserController@register');
+Route::post('register','UserController@register');
 
 //Route::get('/test','AdminController@test');
 //Route::get('/test',function (){
@@ -45,6 +48,11 @@ Route::post('/register','UserController@register');
 //});
 
 
+Route::get('test',function (){
+    $user=new \App\User();
+    $result = $user->create_container('tomhense',"nginx",'8089','/var/www/html');
+    print_r($result);
+});
 
 /* page to input access code */
 Route::get('admin','AdminController@index');

@@ -25,7 +25,7 @@
 @section('sidebar')
     @parent
 
-    <div>
+    <div name="sidebar">
         <input type='checkbox' id='sidemenu'>
         <aside>
             <h2><a class="menua" href="index">Main Page</a></h2>
@@ -35,7 +35,10 @@
                     {{--<a href="home"><li>welcome {{Session::get('username')}}</li></a>--}}
                     <li id="showaccounts">show my accounts</li>
                         @if($space!=0)
-                        <a href="deploy"><li id="deploywebsite">deploy my website</li></a>
+                            <a href="decompressFile"><li id="decompressFile">decompress file</li></a>
+                            <li id="buildWebsite" onclick="showBuild()">build my website</li>
+                            <a href="restartContainer"><li id="restartContainer">restart container</li></a>
+                            <a href="deleteContainer"><li id="deleteContainer">delete container</li></a>
                         @else
                             <li id="addspace" onclick="showspaces()">add a space</li>
                         @endif
@@ -95,11 +98,33 @@
         </div>
     </div>
 
+    <div id="buildDiv" class="floatTop">
+        <div class="shadow"></div>
+        <img id="closeButton" onClick="closeBuild()" class="close" src="{{URL::asset('/img/close_black.png')}}"/>
+        <div class="signInterface">
+            <h1>构建容器</h1>
+            <div class="inputGroup">
+                <form id="buildForm" method="post" action="buildContainer">
+                    {{csrf_field()}}
+                    <select name="choseImg" class="spaceSelect">
+                        <option value="1">nginx-fpm7</option>
+                        <option value="2">nginx-fpm5</option>
+                        <option value="3">tomcat7-jre7</option>
+                        <option value="4">tomcat7-jre8</option>
+                        <option value="4">tomcat8-jre7</option>
+                        <option value="4">tomcat8-jre8</option>
+                    </select>
+                    <button type="submit">确定</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endif
 
 @section('content')
     <div class="iframe-wrapper">
-        <iframe id="iframe" src="http://192.168.27.210/websites/{{Session::get('username')?Session::get('username'):'404.html'}}" scrolling="auto" frameborder="0">
+        <iframe id="iframe" src="http://192.168.27.210:{{Session::get('port')?Session::get('port'):'80/websites/404.html'}}" scrolling="auto" frameborder="0">
 
         </iframe>
     </div>

@@ -12,7 +12,7 @@ use DB;
 class User extends Model
 {
     use Notifiable;
-    public $timestamps=false;
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -71,8 +71,8 @@ class User extends Model
         $userlen = 0;
         $passlen = 0;
 
-        $userpatt="/[a-zA-Z][a-zA-Z0-9]{5,}/";
-        $passpatt="/[a-zA-Z0-9!@#$%^&*-_=+]{8,}/";
+        $userpatt = "/[a-zA-Z][a-zA-Z0-9]{5,}/";
+        $passpatt = "/[a-zA-Z0-9!@#$%^&*-_=+]{8,}/";
 
         $userlen = strlen($username);
         $passlen = strlen($password);
@@ -88,13 +88,13 @@ class User extends Model
         }
 
         /*check username regular */
-        if(!preg_match($userpatt,$username)){
-            return ['status' => 6,'msg'=>'user name should just contain alphabet and digit and started with a alphabet'];
+        if (!preg_match($userpatt, $username)) {
+            return ['status' => 6, 'msg' => 'user name should just contain alphabet and digit and started with a alphabet'];
         }
 
         /* check password regular */
-        if(!preg_match($passpatt,$password)){
-            return ['status'=>7,'msg'=>'containe not allowed word'];
+        if (!preg_match($passpatt, $password)) {
+            return ['status' => 7, 'msg' => 'containe not allowed word'];
         }
 
         return ['status' => 0, 'msg' => 'ok'];
@@ -103,9 +103,10 @@ class User extends Model
     /* user login, check user */
     public function login()
     {
+        $container = new \App\Container();
         /* check username and password empty */
         $user_passwd_exists = $this->user_passwd_not_empty();
-        $type=Request::get('demo-radio');
+        $type = Request::get('demo-radio');
 
         if ($user_passwd_exists['status'] != 0) {
             return ['status' => $user_passwd_exists['status'], 'msg' => $user_passwd_exists['msg']];
@@ -116,7 +117,7 @@ class User extends Model
         $password = $user_passwd_exists['password'];
         $encrypt_passwd = md5($password);
 
-        if($type==1){
+        if ($type == 1) {
             /* check user and password in database */
             if ($this->where([
                 ['username', '=', $username],
@@ -124,21 +125,30 @@ class User extends Model
             ])->first()) {
                 /* if username and password not empty length good ,set session */
                 session()->put('username', $username);
-                session()->put('check',1);
-                return ['status' => 0, 'msg' => 'ok','type'=>'user'];
+                session()->put('check', 1);
+
+                $user = $this->where('username', $username)
+                    ->first();
+                $user_id = $user['id'];
+
+                $port = $container->get_bind_port($user_id);
+
+                session()->put('port', $port);
+
+                return ['status' => 0, 'msg' => 'ok', 'type' => 'user'];
             } else {
                 return ['status' => 5, 'msg' => 'user not exists or wrong password'];
             }
-        }else{
-            if(DB::table('managers')->where([
-                ['username','=',$username],
-                ['password','=',$encrypt_passwd]
-            ])->first()){
-                session()->put('username',$username);
-                session()->put('check',0);
-                return ['status'=>0,'msg'=>'ok','type'=>'manager'];
-            }else{
-                return ['status'=>5,'msg'=>'user not exists or wrong password'];
+        } else {
+            if (DB::table('managers')->where([
+                ['username', '=', $username],
+                ['password', '=', $encrypt_passwd]
+            ])->first()) {
+                session()->put('username', $username);
+                session()->put('check', 0);
+                return ['status' => 0, 'msg' => 'ok', 'type' => 'manager'];
+            } else {
+                return ['status' => 5, 'msg' => 'user not exists or wrong password'];
             }
         }
 
@@ -161,12 +171,12 @@ class User extends Model
             return ['status' => $user_passwd_exists['status'], 'msg' => $user_passwd_exists['msg']];
         }
 
-        $username=$user_passwd_exists['username'];
-        $password=$user_passwd_exists['password'];
-        $encrypt_pass=md5($password);
+        $username = $user_passwd_exists['username'];
+        $password = $user_passwd_exists['password'];
+        $encrypt_pass = md5($password);
 
         // create mysql user and ftp user
-        $this->create_account($username,$password);
+        $this->create_account($username, $password);
 
         /* check username and password length */
         $user_passwd_check = $this->user_passwd_valid_check($username, $password);
@@ -177,65 +187,70 @@ class User extends Model
         }
 
         //check if user already exists
-        if($this->where('username',$username)->first()){
-            return ['status'=>9,'msg'=>'user already exists'];
+        if ($this->where('username', $username)->first()) {
+            return ['status' => 9, 'msg' => 'user already exists'];
         }
 
-        $this->insert(['username'=>$username,'password'=>$encrypt_pass,'decrypt_pass'=>$password]);
-        return ['status'=>0,'msg'=>'insert successed'];
+        $this->insert(['username' => $username, 'password' => $encrypt_pass, 'decrypt_pass' => $password]);
+        return ['status' => 0, 'msg' => 'insert successed'];
     }
 
     /* count users */
-    public function get_users(){
-        $users=$this->count('*');
+    public function get_users()
+    {
+        $users = $this->count('*');
         return $users;
     }
 
     /* get all users in space */
-    public function users_in_space($space){
-        $users=$this->where('space',$space)->get();
+    public function users_in_space($space)
+    {
+        $users = $this->where('space', $space)->get();
         return $users;
     }
 
     // check dir empty
-    public function is_dir_empty($path){
-        $dir=@opendir($path);
-        $i=0;
-        while($_file=readdir($dir)){
+    public function is_dir_empty($path)
+    {
+        $dir = @opendir($path);
+        $i = 0;
+        while ($_file = readdir($dir)) {
             $i++;
         }
-        if($i>2){
+        if ($i > 2) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
 
     //config mysql user
-    public function config_mysql_user($username){
+    public function config_mysql_user($username)
+    {
 
-        $status=0;
-        $arr1=array();
-        $cmd="mysql -uroot -pjustwe -e 'create database d_$username'";
+        $status = 0;
+        $arr1 = array();
+        $cmd = "mysql -uroot -pjustwe -e 'create database d_$username'";
 
-        exec($cmd,$arr1,$status);
+        exec($cmd, $arr1, $status);
 
         $cmd = "mysql -uroot -pjustwe -e \"grant all 
             privileges on d_$username.* to u_$username@'%'\"";
 
-        exec($cmd,$arr1,$status);
+        exec($cmd, $arr1, $status);
 
     }
 
     //config ftp user
-    public function config_ftp_user($username){
+    public function config_ftp_user($username)
+    {
 
-        $chroot_list='/etc/vsftpd/chroot_list';
-        $template='/etc/vsftpd/conf.d/template';
-        $new="/etc/vsftpd/conf.d/$username";
+        $chroot_list = '/etc/vsftpd/chroot_list';
+        $template = '/etc/vsftpd/conf.d/template';
+        $new = "/etc/vsftpd/conf.d/$username";
 
         $fp_chroot_list = fopen($chroot_list, 'a')
-        or die('can not open this file'.$chroot_list);
+        or die('can not open this file' . $chroot_list);
         fwrite($fp_chroot_list, "$username\n");
         fclose($fp_chroot_list);
 
@@ -248,28 +263,29 @@ class User extends Model
         fclose($fp);
 
 
-        exec("mkdir /opt/vsftp/files/$username",$arr1,$status);
-        exec("chown virtualusers:virtualusers /opt/vsftp/files/$username",$arr1,$status);
+        exec("mkdir /opt/vsftp/files/$username", $arr1, $status);
+        exec("chown virtualusers:virtualusers /opt/vsftp/files/$username", $arr1, $status);
 
     }
 
     //add mysql user
-    public function create_account($username,$password){
+    public function create_account($username, $password)
+    {
 
         //get mysql passworded string
-        $result=DB::select("select password('$password') as password");
-        $mysql_pass=$result[0]->password;
+        $result = DB::select("select password('$password') as password");
+        $mysql_pass = $result[0]->password;
 
         //add mysql user
-        $cmd="mysql -uroot -pjustwe -e \"create user u_$username@'%' 
+        $cmd = "mysql -uroot -pjustwe -e \"create user u_$username@'%' 
             identified by '$password'\"";
-        $arr1=array();
-        $status=0;
-        exec($cmd,$arr1,$status);
+        $arr1 = array();
+        $status = 0;
+        exec($cmd, $arr1, $status);
 
         //add ftp user
-        $vsftpd=new \App\Vsftpd();
-        $vsftpd->create_ftp_user($username,$mysql_pass);
+        $vsftpd = new \App\Vsftpd();
+        $vsftpd->create_ftp_user($username, $mysql_pass);
 
         //config mysql
         $this->config_mysql_user($username);
@@ -279,79 +295,338 @@ class User extends Model
     }
 
     // deploy website
-    public function deploy(){
+    public function decompress()
+    {
 
-        $username=session()->get('username');
-        $path="/var/www/html/websites/$username";
-        $file="/opt/vsftp/files/$username/$username.zip";
+        $username = session()->get('username');
+        $path = "/var/www/html/websites/$username";
+        $file = "/opt/vsftp/files/$username/$username.zip";
 
-        $user=$this->where('username',$username)->first();
-        $id=$user['space'];
+        $user = $this->where('username', $username)->first();
+        $id = $user['space'];
 
-        $space=new \App\Manager();
-        $result=$space->get_used_size($id);
+        $space = new \App\Manager();
+        $result = $space->get_used_size($id);
 
-        $used=$result['used_size'];
-        $limit=$result['limit'];
+        $used = $result['used_size'];
+        $limit = $result['limit'];
 
-        if(!is_file($file)){
-            return ['status'=>11,'msg'=>'file not exist!'];
+        if (!is_file($file)) {
+            return ['status' => 11, 'msg' => 'file not exist!'];
         }
 
-        $filesize=filesize($file);
-        $filesize/=(1000*1000);
+        $filesize = filesize($file);
+        $filesize /= (1000 * 1000);
 
-        if($filesize+$username>=$limit){
-            return ['status'=>12,'msg'=>'space over use'];
+        if ($filesize + $username >= $limit) {
+            return ['status' => 12, 'msg' => 'space over use'];
         }
 
-            $zip=new \ZipArchive();
-            $res=$zip->open($file);
+        $zip = new \ZipArchive();
+        $res = $zip->open($file);
 
-            $zip->extractTo($path);
-            $zip->close();
+        $zip->extractTo($path);
+        $zip->close();
 
-            if($res==true){
-            $this->where('username',$username)
-                ->update(['deployed'=>1]);
-            return ['status'=>0,'msg'=>'deploy success'];
-        }else{
-            return ['status'=>10,'msg'=>$res];
+        if ($res == true) {
+            return ['status' => 0, 'msg' => 'decompress success'];
+        } else {
+            return ['status' => 10, 'msg' => $res];
         }
     }
 
-    //get mysql ftp password
-    public function get_password(){
-        $username=session()->get('username');
-        $user=$this->where('username',$username)->first();
-        $result=array(
-            'mysqluser'=>"u_$username",
-            'mysqlpass'=>$user['decrypt_pass'],
-            'ftpuser'=>$username,
-            'ftppass'=>$user['decrypt_pass'],
+    // create container
+    public function create_container($username, $image, $port, $bindingpath)
+    {
+        $images=array('nginx','nginx-fpm7',
+            'nginx-fpm5','tomcat7-jre7',
+            )
+
+        $curl = curl_init();
+        $header = [
+            "Content-Type: application/json",
+        ];
+
+        $user_id = $this->get_id($username);
+
+        curl_setopt($curl, CURLOPT_URL, "http://localhost:5678/containers/create");
+        // get response header
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        // get header and body
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        // set post mode
+        curl_setopt($curl, CURLOPT_POST, 1);
+        // set request header
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+
+        $path = "/var/www/html/websites/$username";
+
+        $container = array(
+            "Image" => $image,
+            "HostConfig" => [
+                "Binds" => ["$path:$bindingpath"],
+                "PortBindings" => [
+                    "80/tcp" => [
+                        ["HostIp" => "", "HostPort" => $port]
+                    ]
+                ],
+            ],
         );
 
-        $result=json_encode($result);
+        // post data convert to json
+        $data = json_encode($container);
+
+        // add post data
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+        // get response data
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        // convert response data to stdclass
+        $response = json_decode($result);
+
+        if ($response->Id != "" && !$response->Warnings) {
+            $container = new \App\Container();
+            $container->create_container($response->Id, $port, $user_id);
+
+            return ['status' => 0, 'msg' => 'create container success', 'container_id' => $response->Id];
+        } else {
+            return ['status' => 15, 'msg' => $response->Warnings];
+        }
+    }
+
+    // start container
+    public function start_container($container_id, $type = "start")
+    {
+
+        $user_id = $this->get_current_userid();
+        $container = new \App\Container();
+        $port = $container->get_bind_port($user_id);
+
+        $curl = curl_init();
+        $header = ["Content-Type: application/json"];
+        $field = "";
+        curl_setopt($curl, CURLOPT_URL, "http://192.168.27.210:5678/containers/$container_id/$type");
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $field);
+
+        $data = curl_exec($curl);
+
+        $response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        switch ($response_code) {
+            case '204':
+                session()->put('port', $port);
+                return ['status' => 0, 'msg' => 'container start success'];
+                break;
+            case '304':
+                return ['status' => 16, 'msg' => 'container alreadt started'];
+                break;
+            case '404':
+                return ['status' => 17, 'msg' => 'no such container'];
+                break;
+            default:
+                return ['status' => 18, 'msg' => 'server error'];
+                break;
+        }
+    }
+
+    // delete container
+    public function delete_container($container_id)
+    {
+
+        $result = $this->stop_container($container_id);
+
+        // stop container before delete container
+//        if(!$result['status']==0 || !$result['status']==19){
+//            return $result;
+//        }
+
+        $curl = curl_init();
+        $header = ["Content-Type: application/json"];
+
+        $field = "";
+        curl_setopt($curl, CURLOPT_URL, "http://192.168.27.210:5678/containers/$container_id");
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
+
+        $data = curl_exec($curl);
+        $response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        switch ($response_code) {
+            case '204':
+                session()->forget('port');
+                return ['status' => 0, 'msg' => 'container delete success'];
+                break;
+            case '400':
+                return ['status' => 22, 'msg' => 'bad parameter'];
+                break;
+            case '404':
+                return ['status' => 17, 'msg' => 'no such container'];
+                break;
+            case '409':
+                return ['status' => 24, 'msg' => 'conflict'];
+                break;
+            default:
+                print ['status' => 21, 'msg' => 'server error'];
+                break;
+        }
+
+    }
+
+    // stop container
+    public function stop_container($container_id)
+    {
+        $curl = curl_init();
+        $header = ["Content-Type: application/json"];
+        $id = "15ebebbb37ec5946f60868f25ab5e641ec756ef43bdab7c2e620b7f7c3394f5d";
+        $field = "";
+        curl_setopt($curl, CURLOPT_URL, "http://192.168.27.210:5678/containers/$container_id/stop");
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $field);
+
+        $data = curl_exec($curl);
+        $response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        switch ($response_code) {
+            case '204':
+                return ['status' => 0, 'msg' => 'stop container success'];
+                break;
+            case '304':
+                return ['status' => 19, 'msg' => 'container already stopd'];
+                break;
+            case '404':
+                return ['status' => 17, 'msg' => 'no such container'];
+                break;
+            default:
+                return ['status' => 21, 'msg' => 'server error'];
+                break;
+        }
+
+    }
+
+    // restart container
+    public function restart_container($container_id)
+    {
+        $type = "restart";
+        $result = $this->start_container($container_id, $type);
         return $result;
     }
 
-    //check add space
-    public function check_space(){
-        $username=session()->get('username');
-        $space=$this->where('username',$username)
+    // deploy on container
+    public function deploy()
+    {
+
+        // decompress files
+        $this->decompress();
+
+        $username = session()->get('username');
+        $path = "/var/www/html/websites/$username";
+        $file = "/opt/vsftp/files/$username/$username.zip";
+        $image = "nginx";
+        $bindingpath = "/usr/share/nginx/html";
+        $user_id = $this->get_id($username);
+
+        $container = new \App\Container();
+
+        $max_port = $container->get_max_port();
+        $max_port = (int)$max_port;
+        $max_port++;
+        if ($max_port < 8000) {
+            $max_port = 8000;
+        }
+        $max_port = (string)$max_port;
+
+        // delete container if user container already exist
+        if ($container_id = $container->get_user_container_id($user_id)) {
+
+            $this->delete_container($container_id);
+            $container->delete_container($user_id);
+        }
+
+        $create_result = $this->create_container($username, $image, $max_port, $bindingpath);
+        if ($create_result['status'] == 0) {
+            $start_result = $this->start_container($create_result['container_id']);
+            if ($start_result['status'] == 0 || $start_result['status'] == 16) {
+                $this->where('username', $username)
+                    ->update(['deployed' => 1]);
+                return ['status' => 0, 'msg' => 'deploy success'];
+            } else
+                return $start_result;
+        } else {
+            return $create_result;
+        }
+
+    }
+
+    // get current username
+    public function get_current_username()
+    {
+        return session()->get('username');
+    }
+
+    //get current userid
+    public function get_current_userid()
+    {
+        $username = $this->get_current_username();
+        $user = $this->where('username', $username)
+            ->pluck('id')
+            ->first();
+        return $user;
+    }
+
+    //get mysql ftp password
+    public function get_password()
+    {
+        $username = session()->get('username');
+        $user = $this->where('username', $username)->first();
+        $result = array(
+            'mysqluser' => "u_$username",
+            'mysqlpass' => $user['decrypt_pass'],
+            'ftpuser' => $username,
+            'ftppass' => $user['decrypt_pass'],
+        );
+
+        $result = json_encode($result);
+        return $result;
+    }
+
+    // get user id
+    public function get_id($username)
+    {
+        $id = $this->where('username', $username)
+            ->pluck("id")
+            ->first();
+        return $id;
+    }
+
+    // check add space
+    public function check_space()
+    {
+        $username = session()->get('username');
+        $space = $this->where('username', $username)
             ->select('space')->first();
 
-        return ['space'=>$space['space']];
+        return ['space' => $space['space']];
     }
 
     // chose space
-    public function chosespace(){
-        $space=Request::get('chosedspace');
-        $username=session()->get('username');
+    public function chosespace()
+    {
+        $space = Request::get('chosedspace');
+        $username = session()->get('username');
 
-        $this->where('username',$username)
-            ->update(['space'=>$space]);
-        return ['status'=>0,'msg'=>'add space success'];
+        $this->where('username', $username)
+            ->update(['space' => $space]);
+        return ['status' => 0, 'msg' => 'add space success'];
     }
 
 }

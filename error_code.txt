@@ -10,5 +10,12 @@ error_code:[
     8=>'wrong code',
     9=>'user alraady exists',
     10=>'deploy failed',
-    14=>'space limit set too big'
+    14=>'space limit set too big',
+    16=>"container already started",
+    17=>'no such container'.
+    18=>'server error',
+    19=>'container already started',
+    21=>'server error',
+    22=>'bad parameter',
+    24=>'conflict'
     ]

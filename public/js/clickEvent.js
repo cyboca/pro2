@@ -24,6 +24,8 @@ function showModifySpace() {
     space.style.display="block";
     main.style.webkitFilter="blur(3px)";
 }
+
+
 function showDeleteSpace() {
     var space=document.getElementById('deletespacediv');
     var main=document.getElementById('main');
@@ -34,6 +36,15 @@ function showDeleteSpace() {
 
 function confirmDeleteSpace() {
     var msg='删除空间，该空间下所有用户部署的网站将全部删除';
+    if(confirm(msg)==true){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function confirmBuild() {
+    var msg='确认重新构建容器吗？已存在的容器将被删除！';
     if(confirm(msg)==true){
         return true;
     }else{
@@ -86,6 +97,22 @@ function closespaces() {
     var main=document.getElementById("main");
 
     spaces.style.display="none";
+    main.style.webkitFilter="";
+}
+
+function showBuild() {
+    var build=document.getElementById("buildDiv");
+    var main=document.getElementById("main");
+
+    build.style.display="block";
+    main.style.webkitFilter = "blur(3px)";
+}
+
+function closeBuild() {
+    var build=document.getElementById("buildDiv");
+    var main=document.getElementById("main");
+
+    build.style.display="none";
     main.style.webkitFilter="";
 }
 
