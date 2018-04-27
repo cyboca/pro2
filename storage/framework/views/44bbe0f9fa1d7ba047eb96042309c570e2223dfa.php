@@ -1,5 +1,14 @@
 <?php $__env->startSection('title', 'my index page'); ?>
 
+<?php $__env->startSection('script'); ?>
+    <script src="<?php echo e(URL::asset('/js/jquery.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('/js/bootstrap.min.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('style'); ?>
+    <link rel="stylesheet" href="<?php echo e(URL::asset('/css/bootstrap.css')); ?>">
+<?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('sidebar'); ?>
     ##parent-placeholder-19bd1503d9bad449304cc6b4e977b74bac6cc771##
     <div>
@@ -12,7 +21,7 @@
                     <a href="home"><li>welcome <?php echo e(Session::get('username')); ?></li></a>
                     <a href="logout"><li>logout</li></a>
                 <?php else: ?>
-                    <li onclick="showSignInWindow()">login</li>
+                    <li data-toggle="modal" data-target="#myLogin"">login</li>
                     <li onclick="showRegisterWindow()">register</li>
                 <?php endif; ?>
             </ul>

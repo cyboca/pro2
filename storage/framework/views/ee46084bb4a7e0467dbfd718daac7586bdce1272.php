@@ -1,6 +1,10 @@
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="<?php echo e(URL::asset('/css/css.css')); ?>"/>
+    <?php $__env->startSection('script'); ?>
+    <?php echo $__env->yieldSection(); ?>
+    <?php $__env->startSection('style'); ?>
+    <?php echo $__env->yieldSection(); ?>
+
     <link type="text/css" rel="stylesheet" href="<?php echo e(URL::asset('/css/table.css')); ?>"/>
     <link type="text/css" rel="stylesheet" href="<?php echo e(URL::asset('/css/menu.css')); ?>">
     <link type="text/css" rel="stylesheet" href="<?php echo e(URL::asset('/css/pagination.css')); ?>">
@@ -10,53 +14,60 @@
 
 </head>
 <body>
-<div id="floatTop" class="floatTop">
-    <div class="shadow"></div>
-    <img id="closeButton" onClick="closeWindow()" class="close" src="<?php echo e(URL::asset('/img/close_black.png')); ?>"/>
-    <div class="signInterface">
-        <h1>用户登录</h1>
-        <div class="inputGroup">
-            <form name="sign" method="post" action="login">
-                <?php echo e(csrf_field()); ?>
 
-                <input type="text" value="" name="username" class="Input" placeholder="用户名">
-                <input type="password" value="" name="password" class="Input" placeholder="密码">
-                <label>
-                    <input type="radio" name="demo-radio" value="1" checked="checked">
-                    <span class="demo-radioInput"></span>用户
-                </label>
-                <label>
-                    <input type="radio" name="demo-radio" value="0">
-                    <span class="demo-radioInput"></span>管理员
-                </label>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    login
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form name="sign" method="post" class="form-horizontal" action="login">
+                    <?php echo e(csrf_field()); ?>
 
-                <p onClick="signInRegister()" id="signInRegister" class="noAccount">没有账号，点击注册</p>
-                <p class="forgetPassword">忘记密码？</p>
-                <input type="submit" name="submit" value="登录" class="signInButton"/>
-            </form>
-        </div>
-    </div>
+                    <div class="control-group col-md-6">
+                        <label class="control-label" for="username">用户名</label>
+                        <div class="controls">
+                            <input type="text" value="" name="username" class="Input" placeholder="用户名">
+                        </div>
+                    </div>
+
+                    <div class="control-group col-md-6">
+                        <label class="control-label" for="password">密码</label>
+                        <div class="controls">
+                            <input type="password" value="" name="password" class="Input" placeholder="密码">
+                        </div>
+                    </div>
+
+                    <div class="control-group span4 offset2">
+                        <label class="radio inline">
+                            <input type="radio" name="demo-radio" value="1" checked="checked">
+                            <span class="demo-radioInput"></span>用户
+                        </label>
+
+                        <label class="radio inline">
+                            <input type="radio" name="demo-radio" value="0" checked="checked">
+                            <span class="demo-radioInput"></span>管理员
+                        </label>
+                    </div>
+
+                    <div class="control-group span4 offset2">
+                        <input type="submit" name="submit" value="登录" class="btn"/>
+                        <p id="signInRegister" class="btn btn-link">没有账号，点击注册</p>
+                    </div>
+
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
 </div>
-<div id="floatTopRegister" class="floatTopRegister">
-    <div class="shadow"></div>
-    <img id="closeButtonImg" onClick="closeWindow()" class="close" src="<?php echo e(URL::asset('/img/close_black.png')); ?>"/>
-    <div class="signInterface reigsterInterface">
-        <h1>用户注册</h1>
-        <div class="inputGroup">
-            <form name="register" method="post" action="register">
-                <?php echo e(csrf_field()); ?>
 
-                <input type="text" value="" id="reg_username" name="username" class="Input" placeholder="姓名">
-                <!--
-                <input type="text" value="" name="phone" class="Input" placeholder="手机号">
-                -->
-                <input type="text" value="" id="reg_password" name="password" class="Input" placeholder="密码">
-                <input type="submit" value="注册" name="submit" class="signInButton"/>
-                <p class="haveAccount">已有账号？<span onClick="registerSignIn()" id="registerSignIn">登录</span></p>
-            </form>
-        </div>
-    </div>
-</div>
 
 <?php $__env->startSection('divs'); ?>
 <?php echo $__env->yieldSection(); ?>

@@ -47,7 +47,10 @@ class User extends Model
     /* get deployed websites */
     public function get_deployed_websites()
     {
-        $users = $this->where('deployed', '=', 1)->paginate(3);
+        $users = $this->where('deployed', '=', 1)
+            ->join('containers','users.id','=',
+                'containers.user_id')
+            ->paginate('3');
         return $users;
     }
 
@@ -336,11 +339,24 @@ class User extends Model
     }
 
     // create container
-    public function create_container($username, $image, $port, $bindingpath)
+    public function create_container($username, $image, $port)
     {
-        $images=array('nginx','nginx-fpm7',
-            'nginx-fpm5','tomcat7-jre7',
-            )
+        $images=array('nginx',
+            'nginx-fpm7',
+            'nginx-fpm5',
+            'tomcat:7.0.86-jre7',
+            'tomcat:7.0.86-jre8',
+            'tomcat:8.0.51-jre7',
+            'tomcat:8.0.51-jre8',
+            );
+
+        if($image>2){
+            $bindingpath="/usr/local/tomcat/webapps/ROOT";
+            $expost_port="8080/tcp";
+        }else{
+            $bindingpath = "/var/www/html";
+            $expost_port="80/tcp";
+        }
 
         $curl = curl_init();
         $header = [
@@ -362,11 +378,11 @@ class User extends Model
         $path = "/var/www/html/websites/$username";
 
         $container = array(
-            "Image" => $image,
+            "Image" => $images[$image],
             "HostConfig" => [
                 "Binds" => ["$path:$bindingpath"],
                 "PortBindings" => [
-                    "80/tcp" => [
+                    $expost_port => [
                         ["HostIp" => "", "HostPort" => $port]
                     ]
                 ],
@@ -388,7 +404,7 @@ class User extends Model
 
         if ($response->Id != "" && !$response->Warnings) {
             $container = new \App\Container();
-            $container->create_container($response->Id, $port, $user_id);
+            $container->create_container($response->Id, $images[$image],$port, $user_id);
 
             return ['status' => 0, 'msg' => 'create container success', 'container_id' => $response->Id];
         } else {
@@ -524,15 +540,14 @@ class User extends Model
     // deploy on container
     public function deploy()
     {
-
         // decompress files
         $this->decompress();
 
         $username = session()->get('username');
-        $path = "/var/www/html/websites/$username";
-        $file = "/opt/vsftp/files/$username/$username.zip";
-        $image = "nginx";
-        $bindingpath = "/usr/share/nginx/html";
+        $image = Request::get('choseImg');
+
+
+
         $user_id = $this->get_id($username);
 
         $container = new \App\Container();
@@ -552,9 +567,14 @@ class User extends Model
             $container->delete_container($user_id);
         }
 
-        $create_result = $this->create_container($username, $image, $max_port, $bindingpath);
+        // create container
+        $create_result = $this->create_container($username, $image, $max_port);
+
+        // if create container not success ,return error
         if ($create_result['status'] == 0) {
             $start_result = $this->start_container($create_result['container_id']);
+
+            //if start container not success ,return error
             if ($start_result['status'] == 0 || $start_result['status'] == 16) {
                 $this->where('username', $username)
                     ->update(['deployed' => 1]);

@@ -297,6 +297,11 @@ html{
 	margin-top: 20px;
 	vertical-align: middle;
 }
+
+.inlinespan{
+	display: inline;
+}
+
 .accountUser {
 	padding: 0;
 	overflow: hidden;

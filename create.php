@@ -20,16 +20,16 @@
     // set request header
     curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
 
-    $image="nginx";
+    $image="tomcat:7.0.86-jre7";
     $port="8084";
     $path="/var/www/html/websites/henry2";
 
     $container=array(
         "Image"=>$image,
         "HostConfig"=>[
-            "Binds"=>["$path:/usr/share/nginx/html"],
+            "Binds"=>["$path:/usr/local/tomcat/webapps/helloworld"],
             "PortBindings"=>[
-                "80/tcp"=>[
+                "8080/tcp"=>[
                     ["HostIp"=>"","HostPort"=>$port]
                 ]
             ],

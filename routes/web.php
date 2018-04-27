@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('index');
 });
 
 Route::group(['middleware'=>'checklogin'],function (){
@@ -27,7 +27,7 @@ Route::group(['middleware'=>'checklogin'],function (){
         $result=$managers->get_all_managers();
         return $result;
     });
-    Route::get('buildWebsite','UserController@build');
+    Route::post('buildContainer','UserController@build');
     Route::get('decompressFile','UserController@decompress');
     Route::get('restartContainer','UserController@restartContainer');
     Route::get('deleteContainer','UserController@deleteContainer');
@@ -49,9 +49,7 @@ Route::post('register','UserController@register');
 
 
 Route::get('test',function (){
-    $user=new \App\User();
-    $result = $user->create_container('tomhense',"nginx",'8089','/var/www/html');
-    print_r($result);
+    return view('test');
 });
 
 /* page to input access code */

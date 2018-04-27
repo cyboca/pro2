@@ -1,6 +1,7 @@
 // JavaScript Document
 $(document).ready(function () {
-    $("#showaccounts").click(function () {
+
+    $('#myModal').on('show.bs.modal',function () {
         $.getJSON("accounts", function (data) {
             $("#mysqluser").val(data.mysqluser);
             $("#mysqlpass").val(data.mysqlpass);
@@ -10,11 +11,24 @@ $(document).ready(function () {
         $("#accounts").css('display','block');
         $("#main").css('webkitFilter',"blur(3px)");
     });
+
+    // $("#showaccounts").click(function () {
+    //     $.getJSON("accounts", function (data) {
+    //         $("#mysqluser").val(data.mysqluser);
+    //         $("#mysqlpass").val(data.mysqlpass);
+    //         $("#ftpuser").val(data.ftpuser);
+    //         $("#ftppass").val(data.ftppass);
+    //     });
+    //     $("#accounts").css('display','block');
+    //     $("#main").css('webkitFilter',"blur(3px)");
+    // });
+
     $("#modifyspaceselect").change(function () {
         $.getJSON("modifyspace?"+$(this).val(),function (data) {
             $("#modifyLimit").val(data.limit);
         });
     });
+
 });
 
 function showModifySpace() {

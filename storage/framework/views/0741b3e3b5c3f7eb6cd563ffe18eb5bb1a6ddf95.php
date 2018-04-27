@@ -1,23 +1,12 @@
 <?php $__env->startSection('title', 'my home'); ?>
 
-<?php $__env->startSection('divs'); ?>
-    ##parent-placeholder-abfaae277dbc0dfd1cc0a2fa0033f2ebab3bcb4c##
-    <div id="accounts" class="floatTop">
-        <div class="shadow"></div>
-        <img id="closeButton" onClick="closeaccounts()" class="close" src="<?php echo e(URL::asset('/img/close_black.png')); ?>"/>
-        <div class="signInterface">
-            <h1>accounts</h1>
-            <div class="inputGroup">
-                <input readonly="readonly" class="accountUser" id="mysqluser" value="tom">
-                <input id="mysqlpass" readonly="readonly" type="password" class="accountPass" value="mysql password">
-                <img id="mysqlvisible" class="visible" src="<?php echo e(URL::asset('/img/visible.png')); ?>" onclick="mysqlchange()"/>
+<?php $__env->startSection('script'); ?>
+    <script src="<?php echo e(URL::asset('/js/jquery.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('/js/bootstrap.min.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
 
-                <input readonly="readonly" class="accountUser" id="ftpuser" value="tom">
-                <input id="ftppass" readonly="readonly" type="password" class="accountPass" value="ftp password">
-                <img id="ftpvisible" class="visible" src="<?php echo e(URL::asset('/img/visible.png')); ?>" onclick="ftpchange()"/>
-            </div>
-        </div>
-    </div>
+<?php $__env->startSection('style'); ?>
+    <link rel="stylesheet" href="<?php echo e(URL::asset('/css/bootstrap.css')); ?>">
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('sidebar'); ?>
@@ -31,7 +20,7 @@
             <ul id="sideul">
                 <?php if(Session::get('check') == 1): ?>
                     
-                    <li id="showaccounts">show my accounts</li>
+                    <li id="showaccounts" data-toggle="modal" data-target="#myModal">show my accounts</li>
                         <?php if($space!=0): ?>
                             <a href="decompressFile"><li id="decompressFile">decompress file</li></a>
                             <li id="buildWebsite" onclick="showBuild()">build my website</li>
@@ -42,8 +31,9 @@
                         <?php endif; ?>
                     <a href="logout"><li>logout</li></a>
                 <?php else: ?>
-                    <li>show users</li>
-                    <li>manager users</li>
+                    <li>welcome <?php echo e(Session::get('username')); ?></li>
+                    
+                    
                     <a href="logout"><li>logout</li></a>
                 <?php endif; ?>
             </ul>
@@ -53,8 +43,6 @@
             <!--for 属性规定 label 与哪个表单元素绑定，即将这个控制侧边栏进出的按钮与checkbox绑定-->
         </div>
     </div>
-
-
 <?php $__env->stopSection(); ?>
 
 <?php if(Session::get('status')>-1): ?>
@@ -76,6 +64,64 @@
             </div>
         </section>
     </div>
+<?php endif; ?>
+
+<?php $__env->startSection('divs'); ?>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        accounts
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="inputGroup">
+
+                            <div class="control-group">
+                                <label class="control-label" for="mysqluser">mysql user</label>
+                                <div class="controls">
+                                    <input readonly="readonly" type="text" class="span2" id="mysqluser" value="tom">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="mysqlpass">mysql password</label>
+                                <div class="controls">
+                                    <input id="mysqlpass" readonly="readonly" type="password" class="span2" value="mysql password">
+                                    <img id="mysqlvisible" class="visible" src="<?php echo e(URL::asset('/img/visible.png')); ?>" onclick="mysqlchange()"/>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="ftpuser">ftp user</label>
+                                <div class="controls">
+                                    <input id="ftpuser" readonly="readonly" type="text" class="span2" value="ftp user">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="ftppass">ftp password</label>
+                                <div class="controls">
+                                    <input id="ftppass" readonly="readonly" type="password" class="span2 " value="ftp password">
+                                    <img id="ftpvisible" class="visible" src="<?php echo e(URL::asset('/img/visible.png')); ?>" onclick="ftpchange()"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    ##parent-placeholder-abfaae277dbc0dfd1cc0a2fa0033f2ebab3bcb4c##
+<?php $__env->stopSection(); ?>
 
     <div id="chosespacediv" class="floatTop">
         <div class="shadow"></div>
@@ -103,31 +149,59 @@
         <div class="signInterface">
             <h1>构建容器</h1>
             <div class="inputGroup">
-                <form id="buildForm" method="post" action="buildContainer">
+                <form id="buildForm" method="post" action="buildContainer" onsubmit="return confirmBuild()">
                     <?php echo e(csrf_field()); ?>
 
-                    <select name="choseImg" class="spaceSelect">
-                        <option value="1">nginx-fpm7</option>
-                        <option value="2">nginx-fpm5</option>
-                        <option value="3">tomcat7-jre7</option>
-                        <option value="4">tomcat7-jre8</option>
-                        <option value="4">tomcat8-jre7</option>
-                        <option value="4">tomcat8-jre8</option>
-                    </select>
-                    <button type="submit">确定</button>
+                    <div class="form-group">
+                        <select name="choseImg" class="spaceSelect form-control">
+                            <option value="0">nginx</option>
+                            <option value="1">nginx-fpm7</option>
+                            <option value="2">nginx-fpm5</option>
+                            <option value="3">tomcat7-jre7</option>
+                            <option value="4">tomcat7-jre8</option>
+                            <option value="5">tomcat8-jre7</option>
+                            <option value="6">tomcat8-jre8</option>
+                        </select>
+                    </div>
+                    <button class="spaceSubmit btn btn-primary" type="submit">确定</button>
                 </form>
             </div>
         </div>
     </div>
 
-<?php endif; ?>
 
 <?php $__env->startSection('content'); ?>
-    <div class="iframe-wrapper">
-        <iframe id="iframe" src="http://192.168.27.210:<?php echo e(Session::get('port')?Session::get('port'):'80/websites/404.html'); ?>" scrolling="auto" frameborder="0">
+    <?php if(Session::get('check')==1): ?>
+        <div class="iframe-wrapper">
+            <iframe id="iframe" src="http://192.168.27.210:<?php echo e(Session::get('port')?Session::get('port'):'80/websites/404.html'); ?>" scrolling="auto" frameborder="0">
+            </iframe>
+        </div>
+    <?php else: ?>
+        <table class="bordered">
+            <tr>
+                <th>#</th>
+                <th>Deployed Website</th>
+                <th>Image</th>
+                <th>User</th>
+            </tr>
+            <?php if(isset($users)): ?>
+                <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <tr>
+                        <th><?php echo e($user->id); ?></th>
+                        <th><a href='<?php echo e("http://192.168.27.210:".$user->port); ?>' target="_blank"><?php echo e("http://192.168.27.210:".$user->port); ?></a></th>
+                        <th><?php echo e($user->image); ?></th>
+                        <th><?php echo e($user->username); ?></th>
+                    </tr>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php else: ?>
+                <p>users not found</p>
+            <?php endif; ?>
+        </table>
+        <div class="paginationdiv">
+            <?php echo $users->render(); ?>
 
-        </iframe>
-    </div>
+        </div>
+    <?php endif; ?>
 <?php $__env->stopSection(); ?>
 
 

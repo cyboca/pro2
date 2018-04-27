@@ -11,12 +11,15 @@ class HomeController extends Controller
     {
         $user=new \App\User();
         $username=$request->session()->get('username');
+        $users=$user->get_deployed_websites();
 
         $managers=new \App\Manager();
         $result=$managers->get_all_managers();
 
         $space=$user->check_space();
-        return view('home',$space,['spaces'=>$result]);
+
+
+        return view('home',$space,['spaces'=>$result,'users'=>$users]);
 
     }
 }

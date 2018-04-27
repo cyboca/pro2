@@ -16,10 +16,11 @@ class Container extends Model
     public $timestamps = false;
 
     // insert into containers
-    public function create_container($container_id, $port, $user_id)
+    public function create_container($container_id, $image,$port, $user_id)
     {
         $this->insert([
             'container_id' => $container_id,
+            'image'=>$image,
             'port' => $port,
             'user_id' => $user_id,
         ]);

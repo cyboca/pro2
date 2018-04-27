@@ -1,0 +1,21 @@
+.myblock{
+    display: block;
+}
+.span2pass{
+    padding: 0;
+    overflow: hidden;
+    font-size: 14px;
+    background: transparent;
+    font-family: inherit;
+    border: none;
+    outline: none;
+    resize: none;
+    height:48px;
+    line-height:24px;
+    border-bottom: 1px solid #e7eaf1;
+    color:#8590a6;
+    float:left;
+    width:90%;
+    margin-top:10px;
+    vertical-align: middle;
+}

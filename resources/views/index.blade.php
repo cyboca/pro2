@@ -2,6 +2,15 @@
 
 @section('title', 'my index page')
 
+@section('script')
+    <script src="{{URL::asset('/js/jquery.min.js')}}"></script>
+    <script src="{{URL::asset('/js/bootstrap.min.js')}}"></script>
+@endsection
+
+@section('style')
+    <link rel="stylesheet" href="{{URL::asset('/css/bootstrap.css')}}">
+@endsection
+
 @section('sidebar')
     @parent
     <div>
@@ -14,7 +23,7 @@
                     <a href="home"><li>welcome {{Session::get('username')}}</li></a>
                     <a href="logout"><li>logout</li></a>
                 @else
-                    <li onclick="showSignInWindow()">login</li>
+                    <li data-toggle="modal" data-target="#myLogin"">login</li>
                     <li onclick="showRegisterWindow()">register</li>
                 @endif
             </ul>
