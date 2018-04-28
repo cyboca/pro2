@@ -9,6 +9,7 @@
 
 @section('style')
     <link rel="stylesheet" href="{{URL::asset('/css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('/css/my.css')}}">
 @endsection
 
 @section('sidebar')
@@ -22,25 +23,23 @@
             <ul id="sideul">
                 @if(Session::get('check') == 1)
                     {{--<a href="home"><li>welcome {{Session::get('username')}}</li></a>--}}
-                    <li id="showaccounts" data-toggle="modal" data-target="#myModal">show my accounts</li>
+                    <li id="showaccounts" data-toggle="modal" data-target="#showAccounts">show my accounts</li>
                         @if($space!=0)
-                            <a href="decompressFile"><li id="decompressFile">decompress file</li></a>
-                            <li id="buildWebsite" onclick="showBuild()">build my website</li>
-                            <a href="restartContainer"><li id="restartContainer">restart container</li></a>
-                            <a href="deleteContainer"><li id="deleteContainer">delete container</li></a>
+                            <a href="decompressFile" class="menua"><li id="decompressFile">decompress file</li></a>
+                            <li id="buildWebsite" data-toggle="modal" data-target="#confirmRebuild">build my website</li>
+                            <a href="restartContainer" class="menua"><li id="restartContainer">restart container</li></a>
+                            <a href="deleteContainer" class="menua"><li id="deleteContainer">delete container</li></a>
                         @else
-                            <li id="addspace" onclick="showspaces()">add a space</li>
+                            <li id="addspace" data-toggle="modal" data-target="#showChoseSpace">add a space</li>
                         @endif
-                    <a href="logout"><li>logout</li></a>
+                    <a href="logout" class="menua"><li>logout</li></a>
                 @else
                     <li>welcome {{Session::get('username')}}</li>
-                    {{--<li>show users</li>--}}
-                    {{--<li>manager users</li>--}}
-                    <a href="logout"><li>logout</li></a>
+                    <a href="logout" class="menua"><li>logout</li></a>
                 @endif
             </ul>
         </aside>
-        <div id='wrap'>
+        <div id='wrap' class="alertx">
             <label class="menulabel" id='sideMenuControl' for='sidemenu'>≡</label>
             <!--for 属性规定 label 与哪个表单元素绑定，即将这个控制侧边栏进出的按钮与checkbox绑定-->
         </div>
@@ -48,7 +47,7 @@
 @endsection
 
 @if(Session::get('status')>-1)
-    <div class="alert">
+    <div class="alertx">
         <input class="fire-check" type="checkbox" checked="checked">
         <section>
             <div class="tn-box tn-box-color-1">
@@ -58,27 +57,25 @@
         </section>
     </div>
 @else
-    <div class="alert">
+    <div class="alertx">
         <input class="fire-check" type="checkbox">
         <section>
             <div class="tn-box tn-box-color-1">
-
             </div>
         </section>
     </div>
 @endif
 
 @section('divs')
-
-    <!-- 模态框（Modal） -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <!-- 模态框 显示账号 -->
+    <div class="modal fade" id="showAccounts" tabindex="-1" role="dialog" aria-labelledby="showAccountsLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
                     </button>
-                    <h4 class="modal-title" id="myModalLabel">
+                    <h4 class="modal-title" id="showAccountsLabel">
                         accounts
                     </h4>
                 </div>
@@ -86,33 +83,42 @@
                     <div class="form-horizontal">
                         <div class="inputGroup">
 
-                            <div class="control-group">
-                                <label class="control-label" for="mysqluser">mysql user</label>
-                                <div class="controls">
-                                    <input readonly="readonly" type="text" class="span2" id="mysqluser" value="tom">
+                            <div class="form-group">
+                                <div class="col-md-offset-1">
+                                    <label class="col-sm-4" for="mysqluser">mysql user</label>
+                                    <div class="col-sm-6">
+                                        <input readonly="readonly" type="text" class="form-control" id="mysqluser" value="tom">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-1">
+                                    <label class="col-sm-4" for="mysqlpass">mysql password</label>
+                                    <div class="col-sm-6">
+                                        <input id="mysqlpass" readonly="readonly" type="password" class="form-control" value="mysql password">
+                                        <img id="mysqlvisible" class="visible" src="{{URL::asset('/img/visible.png')}}" onclick="mysqlchange()"/>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="control-group">
-                                <label class="control-label" for="mysqlpass">mysql password</label>
-                                <div class="controls">
-                                    <input id="mysqlpass" readonly="readonly" type="password" class="span2" value="mysql password">
-                                    <img id="mysqlvisible" class="visible" src="{{URL::asset('/img/visible.png')}}" onclick="mysqlchange()"/>
+                            <div class="form-group">
+                                <div class="col-md-offset-1">
+                                    <label class="col-sm-4" for="ftpuser">ftp user</label>
+                                    <div class="col-sm-6">
+                                        <input id="ftpuser" readonly="readonly" type="text" class="form-control" value="ftp user">
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="control-group">
-                                <label class="control-label" for="ftpuser">ftp user</label>
-                                <div class="controls">
-                                    <input id="ftpuser" readonly="readonly" type="text" class="span2" value="ftp user">
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="ftppass">ftp password</label>
-                                <div class="controls">
-                                    <input id="ftppass" readonly="readonly" type="password" class="span2 " value="ftp password">
-                                    <img id="ftpvisible" class="visible" src="{{URL::asset('/img/visible.png')}}" onclick="ftpchange()"/>
+                            <div class="form-group">
+                                <div class="col-md-offset-1">
+                                    <label class="col-sm-4" for="ftppass">ftp password</label>
+                                    <div class="col-sm-6">
+                                        <input id="ftppass" readonly="readonly" type="password" class="form-control " value="ftp password">
+                                        <img id="ftpvisible" class="visible" src="{{URL::asset('/img/visible.png')}}" onclick="ftpchange()"/>
+                                    </div>
                                 </div>
                             </div>
 
@@ -122,53 +128,97 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
+    <div class="modal fade" id="showChoseSpace" tabindex="-1" role="dialog" aria-labelledby="showChoseSpaceLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="showChoseSpaecLabel">
+                        chose space
+                    </h4>
+                </div>
+                <div class="modal-body smallModal">
+                    <form class="form-horizontal" method="post" action="chosespace">
+                        {{csrf_field()}}
+                        <div class="form-group">
+                            <div class="col-md-offset-2">
+                                <label class="col-sm-3">选择空间</label>
+                                <div class="col-md-4">
+                                    <select name="chosedspace" class="form-control">
+                                        @foreach($spaces as $space)
+                                            <option value="{{$space['id']}}">{{$space['username']}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-default">确定</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="showBuildContainer" tabindex="-1" role="dialog" aria-labelledby="showBuildContainerLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="showBuildContainerLabel">
+                        build container
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                    <form id="buildForm" class="form-horizontal" method="post" action="buildContainer">
+                        {{csrf_field()}}
+                        <div class="form-group">
+                            <div class="col-md-offset-2">
+                                <label class="col-sm-3">选择镜像</label>
+                                <div class="col-md-4">
+                                    <select name="choseImg" class="form-control">
+                                        <option value="0">nginx</option>
+                                        <option value="1">nginx-fpm7</option>
+                                        <option value="2">nginx-fpm5</option>
+                                        <option value="3">tomcat7-jre7</option>
+                                        <option value="4">tomcat7-jre8</option>
+                                        <option value="5">tomcat8-jre7</option>
+                                        <option value="6">tomcat8-jre8</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="spaceSubmit btn btn-primary" type="submit">构建容器</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!-- 信息删除确认 -->
+    <div class="modal fade" id="confirmRebuild">
+        <div class="modal-dialog">
+            <div class="modal-content message_align">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">提示信息</h4>
+                </div>
+                <div class="modal-body">
+                    <p>您确认要重新构建吗？旧的容器将被删除！</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="url"/>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <a class="btn btn-success" data-toggle="modal" data-dismiss="modal" data-target="#showBuildContainer">确定</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     @parent
 @endsection
-
-    <div id="chosespacediv" class="floatTop">
-        <div class="shadow"></div>
-        <img id="closeButton" onClick="closespaces()" class="close" src="{{URL::asset('/img/close_black.png')}}"/>
-        <div class="signInterface">
-            <h1>加入空间</h1>
-            <div class="inputGroup">
-                <form id="spaces" method="post" action="chosespace">
-                    {{csrf_field()}}
-                    <select name="chosedspace">
-                        @foreach($spaces as $space)
-                            <option value="{{$space['id']}}">{{$space['username']}}</option>
-                        @endforeach
-                    </select>
-                    <button type="submit">确定</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="buildDiv" class="floatTop">
-        <div class="shadow"></div>
-        <img id="closeButton" onClick="closeBuild()" class="close" src="{{URL::asset('/img/close_black.png')}}"/>
-        <div class="signInterface">
-            <h1>构建容器</h1>
-            <div class="inputGroup">
-                <form id="buildForm" method="post" action="buildContainer" onsubmit="return confirmBuild()">
-                    {{csrf_field()}}
-                    <div class="form-group">
-                        <select name="choseImg" class="spaceSelect form-control">
-                            <option value="0">nginx</option>
-                            <option value="1">nginx-fpm7</option>
-                            <option value="2">nginx-fpm5</option>
-                            <option value="3">tomcat7-jre7</option>
-                            <option value="4">tomcat7-jre8</option>
-                            <option value="5">tomcat8-jre7</option>
-                            <option value="6">tomcat8-jre8</option>
-                        </select>
-                    </div>
-                    <button class="spaceSubmit btn btn-primary" type="submit">确定</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
 
 @section('content')
     @if(Session::get('check')==1)
@@ -177,26 +227,29 @@
             </iframe>
         </div>
     @else
-        <table class="bordered">
-            <tr>
-                <th>#</th>
-                <th>Deployed Website</th>
-                <th>Image</th>
-                <th>User</th>
-            </tr>
-            @if(isset($users))
-                @foreach($users as $user)
-                    <tr>
-                        <th>{{$user->id}}</th>
-                        <th><a href='{{"http://192.168.27.210:".$user->port}}' target="_blank">{{"http://192.168.27.210:".$user->port}}</a></th>
-                        <th>{{$user->image}}</th>
-                        <th>{{$user->username}}</th>
-                    </tr>
-                @endforeach
-            @else
-                <p>users not found</p>
-            @endif
-        </table>
+        <div class="col-md-6">
+            <table class="table table-bordered">
+                <tr>
+                    <th>#</th>
+                    <th>Deployed Website</th>
+                    <th>Image</th>
+                    <th>User</th>
+                </tr>
+                @if(isset($users))
+                    @foreach($users as $user)
+                        <tr>
+                            <th>{{$user->id}}</th>
+                            <th><a href='{{"http://192.168.27.210:".$user->port}}' target="_blank">{{"http://192.168.27.210:".$user->port}}</a></th>
+                            <th>{{$user->image}}</th>
+                            <th>{{$user->username}}</th>
+                        </tr>
+                    @endforeach
+                @else
+                    <p>users not found</p>
+                @endif
+            </table>
+        </div>
+
         <div class="paginationdiv">
             {!! $users->render() !!}
         </div>

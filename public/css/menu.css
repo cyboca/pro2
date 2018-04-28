@@ -12,8 +12,8 @@
 
 #sidemenu:checked ~ #wrap {
     /*为被选中的sidemenu后的wrap设置属性（非紧邻）*/
-    padding-left: 100px;
-    left: 120px;
+    padding-left: 20px;
+    left: 200px;
 }
 
 aside {
@@ -21,8 +21,8 @@ aside {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: -200px;
-    width: 200px;
+    left: -220px;
+    width: 220px;
     background: black;
     transition: 0.2s ease-out;
     /*动画效果的执行方式是ease-out，即侧边栏滑动效果为渐变式，而不是生硬的突然变化*/
@@ -90,6 +90,9 @@ h2 a:hover{
     text-decoration: none;
     height: 10px;
     color: white;
+}
+.menua:hover{
+    text-decoration: none;
 }
 
 #sideul li:hover {
