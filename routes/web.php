@@ -62,8 +62,8 @@ Route::post('chosespace','UserController@chosespace');
 
 /* backend pages use admin check */
 Route::group(['middleware'=>'admincheck'],function (){
-    Route::get('backend','AdminController@backend');
-    Route::get('managers','ManagerController@index');
+    Route::get('backend/{id?}','AdminController@backend');
+    Route::get('spaces','ManagerController@index');
     Route::get('space','AdminController@space');
     Route::get('adminlogout','AdminController@logout');
     Route::post('deletespace','AdminController@deletespace');

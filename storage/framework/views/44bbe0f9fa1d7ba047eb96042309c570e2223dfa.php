@@ -55,7 +55,7 @@
 <?php endif; ?>
 
 <?php $__env->startSection('divs'); ?>
-    <!-- 模态框 登录 -->
+    <!-- 登录 -->
     <div class="modal fade" id="myLogin" tabindex="-1" role="dialog" aria-labelledby="myLoginLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -116,7 +116,7 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
-    <!-- 模态框 注册 -->
+    <!-- 注册 -->
     <div class="modal fade" id="myRegister" tabindex="-1" role="dialog" aria-labelledby="myRegisterLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -164,7 +164,7 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <table class="table table-bordered">
             <tr>
                 <th>#</th>
@@ -183,10 +183,8 @@
                 <p>users not found</p>
             <?php endif; ?>
         </table>
-        <div class="paginationdiv">
-            <?php echo $users->render(); ?>
+        <?php echo $users->links('default'); ?>
 
-        </div>
     </div>
 <?php $__env->stopSection(); ?>
 

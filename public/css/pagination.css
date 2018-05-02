@@ -19,6 +19,7 @@ ul.pagination li{
 
 ul.pagination li.active {
     background-color: #4CAF50;
+    /*background-color: #337ab7;*/
     color: white;
 }
 

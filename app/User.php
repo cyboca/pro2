@@ -50,7 +50,7 @@ class User extends Model
         $users = $this->where('deployed', '=', 1)
             ->join('containers','users.id','=',
                 'containers.user_id')
-            ->paginate('3');
+            ->paginate('2');
         return $users;
     }
 
@@ -297,6 +297,7 @@ class User extends Model
         $this->config_ftp_user($username);
     }
 
+
     // deploy website
     public function decompress()
     {
@@ -304,6 +305,10 @@ class User extends Model
         $username = session()->get('username');
         $path = "/var/www/html/websites/$username";
         $file = "/opt/vsftp/files/$username/$username.zip";
+
+        if(!file_exists($file)){
+            return ['status'=>'25','msg'=>'file not exist'];
+        }
 
         $user = $this->where('username', $username)->first();
         $id = $user['space'];
@@ -541,7 +546,10 @@ class User extends Model
     public function deploy()
     {
         // decompress files
-        $this->decompress();
+        $result=$this->decompress();
+        if($result['status']!=0){
+            return $result;
+        }
 
         $username = session()->get('username');
         $image = Request::get('choseImg');

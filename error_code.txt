@@ -17,5 +17,6 @@ error_code:[
     19=>'container already started',
     21=>'server error',
     22=>'bad parameter',
-    24=>'conflict'
+    24=>'conflict',
+    25=>'file not exist'
     ]

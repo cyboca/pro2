@@ -93,7 +93,8 @@ class Manager extends Model
         $user=new \App\User();
 
         /* get all managers*/
-        $managers=$this->get();
+        $managers=$this->where('id','<>',0)
+        ->get();
         $result=array();
 
         /* count users in manager space */
@@ -107,7 +108,8 @@ class Manager extends Model
 
     /* get manager numbers */
     public function get_managers(){
-        $managers=$this->count('*');
+        $managers=$this->where('id','<>',0)
+        ->count('*');
         return $managers;
     }
 
@@ -129,9 +131,14 @@ class Manager extends Model
     }
 
     // get all users size which in manager space
-    public function get_size(){
-        $spaces=$this->select('id','username','limit')->get();
+    public function get_size($records_per_page){
+
+        $spaces=$this->where('id','<>',0)
+            ->select('id','username','limit')
+            ->get();
         $result=array();
+        $page=Input::get('page');
+        $pages=ceil(count($spaces)/$records_per_page);
 
         $user=new \App\User();
 
@@ -153,7 +160,6 @@ class Manager extends Model
 
             $percents=$size*100/$limit;
             $percents=round($percents,2);
-
 
             $result[]=['spacename'=>$space_name,'size'=>$size,'size_per'=>$percents,'limit'=>$limit];
         }
@@ -210,15 +216,15 @@ class Manager extends Model
             return ['status'=>9,'msg'=>'user already exist'];
         }
 
-        if($space<30 || $space >1500){
-            return ['status'=>10,'msg'=>'space should larger than 30 and smaller than 1500,default 1000'];
+        if($space){
+            if($space<30 || $space >1500){
+                return ['status'=>10,'msg'=>'space should larger than 30 and smaller than 1500,default 1000'];
+            }
+        }else{
+            $space=1000;
         }
 
-        if($space>=30 && $space<=1500){
-            $this->insert(['username'=>$username,'password'=>$encrypt_pass,'limit'=>$space]);
-        }else{
-            $this->insert(['username'=>$username,'password'=>$encrypt_pass]);
-        }
+        $this->insert(['username'=>$username,'password'=>$encrypt_pass,'limit'=>$space]);
 
         return ['status'=>0,'msg'=>'insert successed'];
     }
@@ -245,7 +251,7 @@ class Manager extends Model
 
     // delete space
     public function deletespace(){
-        $space=Request::get('deletespace');
+        $space=Request::get('deleteSpaceSelect');
         $user=new \App\User();
 
         $users=$user->users_in_space($space);
@@ -276,7 +282,7 @@ class Manager extends Model
     //modify space limit
     public function modifyspacelimit(){
         $limit=Request::get('modifyLimit');
-        $space=Request::get('modifySpace');
+        $space=Request::get('modifySpaceSelect');
 
         if($limit>=0 && $limit<=4000){
             $this->where('id',$space)

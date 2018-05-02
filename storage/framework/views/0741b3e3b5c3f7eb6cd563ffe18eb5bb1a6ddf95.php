@@ -126,6 +126,7 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
+    <!-- 选择空间 -->
     <div class="modal fade" id="showChoseSpace" tabindex="-1" role="dialog" aria-labelledby="showChoseSpaceLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -137,8 +138,8 @@
                         chose space
                     </h4>
                 </div>
-                <div class="modal-body smallModal">
-                    <form class="form-horizontal" method="post" action="chosespace">
+                <div class="modal-body">
+                    <form id="chooseSpace" class="form-horizontal" method="post" action="chosespace">
                         <?php echo e(csrf_field()); ?>
 
                         <div class="form-group">
@@ -151,15 +152,18 @@
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-default">确定</button>
                             </div>
                         </div>
                     </form>
+                </div>
+                <div class="modal-footer">
+                    <button form="chooseSpace" type="submit" class="btn btn-success">确定</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
 
+    <!-- 重建容器 -->
     <div class="modal fade" id="showBuildContainer" tabindex="-1" role="dialog" aria-labelledby="showBuildContainerLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -191,9 +195,12 @@
                                     </select>
                                 </div>
                             </div>
-                            <button class="spaceSubmit btn btn-primary" type="submit">构建容器</button>
+
                         </div>
                     </form>
+                </div>
+                <div class="modal-footer">
+                    <button form="buildForm" class="btn btn-success" type="submit">构建容器</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
@@ -223,7 +230,7 @@
 <?php $__env->startSection('content'); ?>
     <?php if(Session::get('check')==1): ?>
         <div class="iframe-wrapper">
-            <iframe id="iframe" src="http://192.168.27.210:<?php echo e(Session::get('port')?Session::get('port'):'80/websites/404.html'); ?>" scrolling="auto" frameborder="0">
+            <iframe id="iframe" src="http://192.168.27.210:<?php echo e(Session::get('port')?Session::get('port'):'80/websites/error.html'); ?>" scrolling="auto" frameborder="0">
             </iframe>
         </div>
     <?php else: ?>
@@ -249,11 +256,8 @@
                 <?php endif; ?>
             </table>
         </div>
+        <?php echo $users->render(); ?>
 
-        <div class="paginationdiv">
-            <?php echo $users->render(); ?>
-
-        </div>
     <?php endif; ?>
 <?php $__env->stopSection(); ?>
 

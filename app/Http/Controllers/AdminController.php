@@ -9,8 +9,10 @@
 namespace App\Http\Controllers;
 
 
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
-use Request;
 use Illuminate\Support\Facades\Input;
 
 class AdminController extends Controller
@@ -28,7 +30,16 @@ class AdminController extends Controller
         }
     }
 
-    public function backend(){
+    public function backend(Request $request){
+
+
+        if(Input::get('page')){
+            $current_page=Input::get('page');
+            $current_page =$current_page <=0 ?1:$current_page;
+        }else{
+            $current_page=1;
+        }
+        $perPage=2;
 
         $manager=new \App\Manager();
         /* count managers */
@@ -38,9 +49,18 @@ class AdminController extends Controller
         /* count users */
         $users=$user->get_users();
 
-        $sizes=$manager->get_size();
+        $sizes=$manager->get_size(2);
 
-        return view('backend',['managers'=>$managers,'users'=>$users,'sizes'=>$sizes]);
+        $item=array_slice($sizes,($current_page-1)*$perPage,$perPage);
+        $total=count($sizes);
+        $paginator=new LengthAwarePaginator($item,$total,$perPage,$current_page,[
+            'path'=>Paginator::resolveCurrentPage(),
+            'pageName'=>'page',
+        ]);
+        $paginator=$paginator->setPath('/backend');
+
+
+        return view('backend',['managers'=>$managers,'users'=>$users,'sizes'=>$paginator]);
     }
 
 //    public function managers(){
@@ -68,7 +88,7 @@ class AdminController extends Controller
         $space=new \App\Manager();
         $space->deletespace();
 
-        return redirect('managers')->with(['status'=>0,'msg'=>'delete space success']);
+        return redirect('spaces')->with(['status'=>0,'msg'=>'delete space success']);
     }
 
     public function modifyspace(){
@@ -80,6 +100,6 @@ class AdminController extends Controller
         $space=new \App\Manager();
         $result=$space->modifyspacelimit();
 
-        return redirect('managers')->with($result);
+        return redirect('spaces')->with($result);
     }
 }
