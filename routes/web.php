@@ -15,6 +15,10 @@ Route::get('/', function () {
     return redirect('index');
 });
 
+Route::get('welcome',function (){
+    return view('welcome');
+});
+
 Route::group(['middleware'=>'checklogin'],function (){
     Route::get('home','HomeController@index');
     Route::get('accounts',function (){
@@ -41,15 +45,18 @@ Route::get('logout','UserController@logout');
 
 Route::post('register','UserController@register');
 
-//Route::get('/test','AdminController@test');
-//Route::get('/test',function (){
-//    $manager=new \App\Manager();
-//    return $manager->get_size();
-//});
 
 
 Route::get('test',function (){
-    return view('test');
+    $inst_user=new \App\User();
+    $space=new \App\Manager();
+
+    $id=$space->get_current_space();
+    $result=$inst_user->get_deployed_websites($id);
+    print_r($result);
+});
+Route::get('good',function (){
+    echo "this is good test";
 });
 
 /* page to input access code */

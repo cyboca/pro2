@@ -12,7 +12,6 @@
 
 <?php $__env->startSection('sidebar'); ?>
     ##parent-placeholder-19bd1503d9bad449304cc6b4e977b74bac6cc771##
-
     <div name="sidebar">
         <input type='checkbox' id='sidemenu'>
         <aside>
@@ -22,7 +21,7 @@
                 <?php if(Session::get('check') == 1): ?>
                     
                     <li id="showaccounts" data-toggle="modal" data-target="#showAccounts">show my accounts</li>
-                        <?php if($space!=0): ?>
+                        <?php if($chosed_space!=0): ?>
                             <a href="decompressFile" class="menua"><li id="decompressFile">decompress file</li></a>
                             <li id="buildWebsite" data-toggle="modal" data-target="#confirmRebuild">build my website</li>
                             <a href="restartContainer" class="menua"><li id="restartContainer">restart container</li></a>
@@ -95,8 +94,8 @@
                                 <div class="col-md-offset-1">
                                     <label class="col-sm-4" for="mysqlpass">mysql password</label>
                                     <div class="col-sm-6">
-                                        <input id="mysqlpass" readonly="readonly" type="password" class="form-control" value="mysql password">
-                                        <img id="mysqlvisible" class="visible" src="<?php echo e(URL::asset('/img/visible.png')); ?>" onclick="mysqlchange()"/>
+                                        <input id="mysqlpass" readonly="readonly" type="password" class="form-control inputinline" value="mysql password">
+                                        <img id="mysqlvisible" class="visible imgline" src="<?php echo e(URL::asset('/img/visible.png')); ?>" onclick="mysqlchange()"/>
                                     </div>
                                 </div>
                             </div>
@@ -228,37 +227,41 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-    <?php if(Session::get('check')==1): ?>
-        <div class="iframe-wrapper">
-            <iframe id="iframe" src="http://192.168.27.210:<?php echo e(Session::get('port')?Session::get('port'):'80/websites/error.html'); ?>" scrolling="auto" frameborder="0">
-            </iframe>
-        </div>
-    <?php else: ?>
-        <div class="col-md-6">
-            <table class="table table-bordered">
-                <tr>
-                    <th>#</th>
-                    <th>Deployed Website</th>
-                    <th>Image</th>
-                    <th>User</th>
-                </tr>
-                <?php if(isset($users)): ?>
-                    <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr>
-                            <th><?php echo e($user->id); ?></th>
-                            <th><a href='<?php echo e("http://192.168.27.210:".$user->port); ?>' target="_blank"><?php echo e("http://192.168.27.210:".$user->port); ?></a></th>
-                            <th><?php echo e($user->image); ?></th>
-                            <th><?php echo e($user->username); ?></th>
-                        </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                <?php else: ?>
-                    <p>users not found</p>
-                <?php endif; ?>
-            </table>
-        </div>
-        <?php echo $users->render(); ?>
+    <div class="col-md-6">
+        <?php if(Session::get('check')==1): ?>
+            <div class="iframe-wrapper">
+                <iframe id=iframeHome" style="width: 1024px;height: 800px;" src="http://<?php echo e(Session::get('username')?Session::get('username'):'default'); ?>.example.com" scrolling="auto" onload="changeFrameHeight()" frameborder="0">
+                </iframe>
+            </div>
+        <?php else: ?>
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>#</th>
+                        <th>Deployed Website</th>
+                        <th>Image</th>
+                        <th>User</th>
+                    </tr>
+                    <?php if(isset($users)): ?>
+                        <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
+                                <th><?php echo e($user->user_id); ?></th>
+                                <th><a href='<?php echo e("http://".$user->username.".example.com"); ?>' target="_blank"><?php echo e("http://".$user->username.".example.com"); ?></a></th>
+                                <th><?php echo e($user->image); ?></th>
+                                <th><?php echo e($user->username); ?></th>
+                            </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php else: ?>
+                        <p>users not found</p>
+                    <?php endif; ?>
+                </table>
+                <?php echo $users->render(); ?>
 
-    <?php endif; ?>
+            </div>
+
+        <?php endif; ?>
+    </div>
+
 <?php $__env->stopSection(); ?>
 
 

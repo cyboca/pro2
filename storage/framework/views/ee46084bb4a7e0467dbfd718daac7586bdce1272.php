@@ -19,11 +19,13 @@
 <?php echo $__env->yieldSection(); ?>
 
 <div class="main" id="main">
-<?php $__env->startSection('sidebar'); ?>
-<?php echo $__env->yieldSection(); ?>
-<div>
+
+    <?php $__env->startSection('sidebar'); ?>
+    <?php echo $__env->yieldSection(); ?>
+
+
     <?php echo $__env->yieldContent('content'); ?>
-</div>
+
 </div>
 </body>
 </html>

@@ -21,8 +21,7 @@
             <h2><a class="menua" href="backend">Main Page</a></h2>
             <br/>
             <ul id="sideul">
-                <a href="spaces" class="menua"><li id="managers">管理租户</li></a>
-                <a href="space" class="menua"><li id="spaces">管理空间</li></a>
+                <a href="spaces" class="menua"><li id="managers">manage space</li></a>
                 <a href="adminlogout" class="menua"><li>logout</li></a>
             </ul>
         </aside>

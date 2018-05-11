@@ -43,11 +43,16 @@ class User extends Model
 //            return $result;
 //        }
 //    }
+    public $name;
+    public $id;
+    public $container_id;
 
     /* get deployed websites */
-    public function get_deployed_websites()
+    public function get_deployed_websites($space)
     {
-        $users = $this->where('deployed', '=', 1)
+        $users = $this->where([
+            ['deployed', '=', 1],
+            ['space','=',$space]])
             ->join('containers','users.id','=',
                 'containers.user_id')
             ->paginate('2');
@@ -71,11 +76,8 @@ class User extends Model
     /* username and password validation check */
     public function user_passwd_valid_check($username, $password)
     {
-        $userlen = 0;
-        $passlen = 0;
-
-        $userpatt = "/[a-zA-Z][a-zA-Z0-9]{5,}/";
-        $passpatt = "/[a-zA-Z0-9!@#$%^&*-_=+]{8,}/";
+        $userpatt = "/[a-zA-Z][a-zA-Z0-9]{6,15}/";
+        $passpatt = "/[a-zA-Z0-9!@#$%^&*-_=+]{8,20}/";
 
         $userlen = strlen($username);
         $passlen = strlen($password);
@@ -92,12 +94,13 @@ class User extends Model
 
         /*check username regular */
         if (!preg_match($userpatt, $username)) {
-            return ['status' => 6, 'msg' => 'user name should just contain alphabet and digit and started with a alphabet'];
+            return ['status' => 6, 'msg' => 'user name should just contain alphabet 
+                and digit and started with a alphabet'];
         }
 
         /* check password regular */
         if (!preg_match($passpatt, $password)) {
-            return ['status' => 7, 'msg' => 'containe not allowed word'];
+            return ['status' => 7, 'msg' => 'contain not allowed word'];
         }
 
         return ['status' => 0, 'msg' => 'ok'];
@@ -134,6 +137,9 @@ class User extends Model
                     ->first();
                 $user_id = $user['id'];
 
+                $this->name=$username;
+                $this->id=$user_id;
+
                 $port = $container->get_bind_port($user_id);
 
                 session()->put('port', $port);
@@ -167,7 +173,6 @@ class User extends Model
     /* user register func */
     public function register()
     {
-
         /* check usernamd password empty */
         $user_passwd_exists = $this->user_passwd_not_empty();
         if ($user_passwd_exists['status'] != 0) {
@@ -177,9 +182,6 @@ class User extends Model
         $username = $user_passwd_exists['username'];
         $password = $user_passwd_exists['password'];
         $encrypt_pass = md5($password);
-
-        // create mysql user and ftp user
-        $this->create_account($username, $password);
 
         /* check username and password length */
         $user_passwd_check = $this->user_passwd_valid_check($username, $password);
@@ -194,8 +196,11 @@ class User extends Model
             return ['status' => 9, 'msg' => 'user already exists'];
         }
 
+        // create mysql user and ftp user
+        $this->create_account($username, $password);
+
         $this->insert(['username' => $username, 'password' => $encrypt_pass, 'decrypt_pass' => $password]);
-        return ['status' => 0, 'msg' => 'insert successed'];
+        return ['status' => 0, 'msg' => 'register successed'];
     }
 
     /* count users */
@@ -209,7 +214,8 @@ class User extends Model
     public function users_in_space($space)
     {
         $users = $this->where('space', $space)->get();
-        return $users;
+        $result=json_decode($users);
+        return $result;
     }
 
     // check dir empty
@@ -267,7 +273,8 @@ class User extends Model
 
 
         exec("mkdir /opt/vsftp/files/$username", $arr1, $status);
-        exec("chown virtualusers:virtualusers /opt/vsftp/files/$username", $arr1, $status);
+        exec("chown virtualusers:virtualusers /opt/vsftp/files/$username",
+            $arr1, $status);
 
     }
 
@@ -297,7 +304,6 @@ class User extends Model
         $this->config_ftp_user($username);
     }
 
-
     // deploy website
     public function decompress()
     {
@@ -307,7 +313,7 @@ class User extends Model
         $file = "/opt/vsftp/files/$username/$username.zip";
 
         if(!file_exists($file)){
-            return ['status'=>'25','msg'=>'file not exist'];
+            return ['status'=>25,'msg'=>'file not exist'];
         }
 
         $user = $this->where('username', $username)->first();
@@ -418,7 +424,7 @@ class User extends Model
     }
 
     // start container
-    public function start_container($container_id, $type = "start")
+    public function start_container($container_id, $type = "start",$username)
     {
 
         $user_id = $this->get_current_userid();
@@ -428,7 +434,7 @@ class User extends Model
         $curl = curl_init();
         $header = ["Content-Type: application/json"];
         $field = "";
-        curl_setopt($curl, CURLOPT_URL, "http://192.168.27.210:5678/containers/$container_id/$type");
+        curl_setopt($curl, CURLOPT_URL, "http://localhost:5678/containers/$container_id/$type");
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -441,6 +447,7 @@ class User extends Model
         switch ($response_code) {
             case '204':
                 session()->put('port', $port);
+                $this->register_service($username,$port);
                 return ['status' => 0, 'msg' => 'container start success'];
                 break;
             case '304':
@@ -455,22 +462,88 @@ class User extends Model
         }
     }
 
+    // get container_id
+    public function get_container_id(){
+        $container=new Container();
+        if($this->id){
+            return $container->get_user_container_id($this->id);
+        }else{
+            return $container->get_user_container_id($this->get_current_userid());
+        }
+    }
+
+    // register service
+    public function register_service($name,$port){
+
+        $data=array(
+            "id"=>$name,
+            "name"=>$name,
+            "port"=>$port,
+            "tags"=>["vs"],
+        );
+
+        $curl=curl_init();
+        curl_setopt($curl,CURLOPT_URL,"http://localhost:8500/v1/agent/service/register");
+        curl_setopt($curl,CURLOPT_HEADER,0);
+        curl_setopt($curl,CURLOPT_CUSTOMREQUEST,"PUT");
+        curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+
+        $data_json=json_encode($data);
+
+        curl_setopt($curl,CURLOPT_POSTFIELDS,$data_json);
+        $result=curl_exec($curl);
+        curl_close($curl);
+
+        $response=json_decode($result);
+
+        if(!$response){
+            return ['status'=>0,'msg'=>'register service success'];
+        }else{
+            return ['status'=>26,'msg'=>'register service failed'];
+        }
+    }
+
+    // deregister service
+    public function deregister_service($id){
+        $curl=curl_init();
+        curl_setopt($curl,CURLOPT_URL,"http://localhost:8500/v1/agent/service/deregister/$id");
+        curl_setopt($curl,CURLOPT_HEADER,0);
+        curl_setopt($curl,CURLOPT_CUSTOMREQUEST,"PUT");
+        curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+
+        $result=curl_exec($curl);
+        curl_close($curl);
+
+        $response=json_decode($result);
+
+        if(!$response){
+            return ['status'=>0,'msg'=>'deregister service success'];
+        }else{
+            return ['status'=>27,'msg'=>'deregister service failed'];
+        }
+    }
+
     // delete container
     public function delete_container($container_id)
     {
 
         $result = $this->stop_container($container_id);
 
-        // stop container before delete container
-//        if(!$result['status']==0 || !$result['status']==19){
-//            return $result;
-//        }
+         //stop container before delete container
+        if(!$result['status']==0 || !$result['status']==19){
+            return $result;
+        }
 
         $curl = curl_init();
         $header = ["Content-Type: application/json"];
 
         $field = "";
-        curl_setopt($curl, CURLOPT_URL, "http://192.168.27.210:5678/containers/$container_id");
+        if($this->container_id){
+            curl_setopt($curl, CURLOPT_URL, "http://localhost:5678/containers/$this->container_id");
+        }else{
+            curl_setopt($curl, CURLOPT_URL, "http://localhost:5678/containers/$container_id");
+        }
+
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -507,7 +580,7 @@ class User extends Model
         $header = ["Content-Type: application/json"];
         $id = "15ebebbb37ec5946f60868f25ab5e641ec756ef43bdab7c2e620b7f7c3394f5d";
         $field = "";
-        curl_setopt($curl, CURLOPT_URL, "http://192.168.27.210:5678/containers/$container_id/stop");
+        curl_setopt($curl, CURLOPT_URL, "http://localhost:5678/containers/$container_id/stop");
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -519,6 +592,7 @@ class User extends Model
 
         switch ($response_code) {
             case '204':
+                $this->deregister_service($this->name);
                 return ['status' => 0, 'msg' => 'stop container success'];
                 break;
             case '304':
@@ -535,10 +609,10 @@ class User extends Model
     }
 
     // restart container
-    public function restart_container($container_id)
+    public function restart_container($container_id,$username)
     {
         $type = "restart";
-        $result = $this->start_container($container_id, $type);
+        $result = $this->start_container($container_id, $type,$username);
         return $result;
     }
 
@@ -554,8 +628,6 @@ class User extends Model
         $username = session()->get('username');
         $image = Request::get('choseImg');
 
-
-
         $user_id = $this->get_id($username);
 
         $container = new \App\Container();
@@ -563,8 +635,8 @@ class User extends Model
         $max_port = $container->get_max_port();
         $max_port = (int)$max_port;
         $max_port++;
-        if ($max_port < 8000) {
-            $max_port = 8000;
+        if ($max_port < 30000) {
+            $max_port = 30000;
         }
         $max_port = (string)$max_port;
 
@@ -580,12 +652,13 @@ class User extends Model
 
         // if create container not success ,return error
         if ($create_result['status'] == 0) {
-            $start_result = $this->start_container($create_result['container_id']);
+            $start_result = $this->start_container($create_result['container_id'],"start",$username);
 
             //if start container not success ,return error
             if ($start_result['status'] == 0 || $start_result['status'] == 16) {
                 $this->where('username', $username)
                     ->update(['deployed' => 1]);
+                $this->register_service($username,$max_port);
                 return ['status' => 0, 'msg' => 'deploy success'];
             } else
                 return $start_result;
@@ -605,10 +678,13 @@ class User extends Model
     public function get_current_userid()
     {
         $username = $this->get_current_username();
-        $user = $this->where('username', $username)
-            ->pluck('id')
-            ->first();
-        return $user;
+        $user = $this->where('username',$username)->first();
+        $user=json_decode($user);
+        if($this->id){
+            return $this->id;
+        }else{
+            return $user->id;
+        }
     }
 
     //get mysql ftp password
@@ -630,10 +706,10 @@ class User extends Model
     // get user id
     public function get_id($username)
     {
-        $id = $this->where('username', $username)
-            ->pluck("id")
+        $user = $this->where('username', $username)
             ->first();
-        return $id;
+        $user=json_decode($user);
+        return $user->id;
     }
 
     // check add space
@@ -655,6 +731,12 @@ class User extends Model
         $this->where('username', $username)
             ->update(['space' => $space]);
         return ['status' => 0, 'msg' => 'add space success'];
+    }
+
+    // back to default space
+    public function back_to_default_sapce(){
+        $this->where('id',$this->id)
+            ->update(['space'=>0,'deployed'=>0]);
     }
 
 }

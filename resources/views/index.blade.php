@@ -164,25 +164,29 @@
 @endsection
 
 @section('content')
-    <div class="col-md-6">
-        <table class="table table-bordered">
-            <tr>
-                <th>#</th>
-                <th>Deployed Website</th>
-                <th>User</th>
-            </tr>
-            @if(isset($users))
-                @foreach($users as $user)
-                    <tr>
-                        <th>{{$user->id}}</th>
-                        <th><a href='{{"http://192.168.27.210/websites/".$user->username}}' target="_blank">{{"http://192.168.27.210/websites/".$user->username}}</a></th>
-                        <th>{{$user->username}}</th>
-                    </tr>
-                @endforeach
-            @else
-                <p>users not found</p>
-            @endif
-        </table>
-        {!! $users->links('default') !!}
+    <div class="col-md-6 content">
+        <div class="title m-b-md">
+           Welcome to cyboca virtualhost
+        </div>
+
+        {{--<table class="table table-bordered">--}}
+            {{--<tr>--}}
+                {{--<th>#</th>--}}
+                {{--<th>Deployed Website</th>--}}
+                {{--<th>User</th>--}}
+            {{--</tr>--}}
+            {{--@if(isset($users))--}}
+                {{--@foreach($users as $user)--}}
+                    {{--<tr>--}}
+                        {{--<th>{{$user->id}}</th>--}}
+                        {{--<th><a href='{{"http://192.168.27.210/websites/".$user->username}}' target="_blank">{{"http://192.168.27.210/websites/".$user->username}}</a></th>--}}
+                        {{--<th>{{$user->username}}</th>--}}
+                    {{--</tr>--}}
+                {{--@endforeach--}}
+            {{--@else--}}
+                {{--<p>users not found</p>--}}
+            {{--@endif--}}
+        {{--</table>--}}
+        {{--{!! $users->links('default') !!}--}}
     </div>
 @endsection

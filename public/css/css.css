@@ -278,9 +278,8 @@ html{
 	border-style: solid;
 	border-width: 2px;
 	border-color: #000000;
-	width: 80%;
-	height: 60%;
-
+	width: 1000px;
+	height: 800px;
 }
 #iframe{
 	width: 100%;

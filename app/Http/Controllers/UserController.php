@@ -71,9 +71,10 @@ class UserController extends Controller
         $container = new \App\Container();
 
         $user_id = $user->get_current_userid();
+        $username=$user->get_current_username();
         $container_id = $container->get_user_container_id($user_id);
 
-        $result = $user->restart_container($container_id);
+        $result = $user->restart_container($container_id,$username);
         return redirect('home')->with($result);
     }
 

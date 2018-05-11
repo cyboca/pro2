@@ -37,6 +37,14 @@ function showModifySpace() {
     main.style.webkitFilter="blur(3px)";
 }
 
+function changeFrageHeight() {
+    var ifm=document.getElementById("iframeHome");
+    ifm.height=document.documentElement.clientHeight;
+}
+
+window.onresize=function () {
+    changeFrageHeight();
+}
 
 function showDeleteSpace() {
     var space=document.getElementById('deletespacediv');

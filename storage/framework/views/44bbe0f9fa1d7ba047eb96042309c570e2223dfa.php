@@ -164,27 +164,30 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-    <div class="col-md-6">
-        <table class="table table-bordered">
-            <tr>
-                <th>#</th>
-                <th>Deployed Website</th>
-                <th>User</th>
-            </tr>
-            <?php if(isset($users)): ?>
-                <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <tr>
-                        <th><?php echo e($user->id); ?></th>
-                        <th><a href='<?php echo e("http://192.168.27.210/websites/".$user->username); ?>' target="_blank"><?php echo e("http://192.168.27.210/websites/".$user->username); ?></a></th>
-                        <th><?php echo e($user->username); ?></th>
-                    </tr>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            <?php else: ?>
-                <p>users not found</p>
-            <?php endif; ?>
-        </table>
-        <?php echo $users->links('default'); ?>
+    <div class="col-md-6 content">
+        <div class="title m-b-md">
+           Welcome to cyboca virtualhost
+        </div>
 
+        
+            
+                
+                
+                
+            
+            
+                
+                    
+                        
+                        
+                        
+                    
+                
+            
+                
+            
+        
+        
     </div>
 <?php $__env->stopSection(); ?>
 

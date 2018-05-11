@@ -25,10 +25,17 @@
 .visible{
     height: 20px;
     width: 20px;
-    margin-top: 20px;
+    margin-top: 0px;
     vertical-align: middle;
 }
-
+.iframe-wrapper{
+    margin-top: 50px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #000000;
+    width: 1000px;
+    height: 700px;
+}
 .span2pass{
     padding: 0;
     overflow: hidden;
@@ -50,4 +57,22 @@
 
 .alertx{
     /*border: 1px solid;*/
+}
+.m-b-md {
+    margin-bottom: 30px;
+}
+.content {
+    text-align: center;
+}
+
+.title {
+    font-size: 84px;
+}
+
+.imgline{
+    display: inline;
+}
+
+.inputinline{
+    display: inline;
 }

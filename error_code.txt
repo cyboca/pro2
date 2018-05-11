@@ -19,4 +19,6 @@ error_code:[
     22=>'bad parameter',
     24=>'conflict',
     25=>'file not exist'
+    26=>'register service failed',
+    27=>'deregister service failed'
     ]

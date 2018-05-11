@@ -140,10 +140,10 @@ class Manager extends Model
         $page=Input::get('page');
         $pages=ceil(count($spaces)/$records_per_page);
 
-        $user=new \App\User();
+
 
         foreach ($spaces as $space){
-
+            $user=new \App\User();
             $space_id=$space['id'];
             $space_name=$space['username'];
             $limit=$space['limit'];
@@ -151,7 +151,7 @@ class Manager extends Model
             $size=0;
             $users=$user->users_in_space($space_id);
             foreach ($users as $user){
-                $path="/var/www/html/websites/".$user['username'];
+                $path="/var/www/html/websites/".$user->username;
                 $size+=$this->directory_size($path);
             }
             /* size Mb */
@@ -176,7 +176,7 @@ class Manager extends Model
         $users=$user->users_in_space($id);
         $size=0;
         foreach ($users as $user){
-            $path="/var/www/html/websites/".$user['username'];
+            $path="/var/www/html/websites/".$user->username;
             $size+=$this->directory_size($path);
         }
 
@@ -252,18 +252,30 @@ class Manager extends Model
     // delete space
     public function deletespace(){
         $space=Request::get('deleteSpaceSelect');
-        $user=new \App\User();
 
-        $users=$user->users_in_space($space);
+        $inst_user=new \App\User();
+        $inst_container=new \App\Container();
 
-        $result=array();
+        $users=$inst_user->users_in_space($space);
+
         foreach($users as $user){
-            $path="/var/www/html/websites/".$user['username'];
+            $path="/var/www/html/websites/".$user->username;
+            $inst_user->id=$user->id;
+            $inst_user->name=$user->username;
             $this->removeDir($path);
+            $inst_user->back_to_default_sapce();
+            $delete_container_response=$inst_user->delete_container($inst_user->get_container_id());
+            $inst_container->delete_container($inst_user->id);
+            if($delete_container_response['status']!=0){
+                return $delete_container_response;
+            }
         }
 
-        $this->where('id',$space)
-            ->delete();
+        $this->where('id',$space)->delete();
+    }
+
+    public function deletespace2($space){
+        $this->where('id',$space)->delete();
     }
 
     //get space
@@ -291,5 +303,13 @@ class Manager extends Model
         }else{
             return ['status'=>14,'msg'=>'space limit set too big'];
         }
+    }
+
+    public function get_current_space(){
+        $space_name=session()->get('username');
+        $space=$this->where('username',$space_name)
+            ->first();
+        $result=json_decode($space);
+        return $result->id;
     }
 }

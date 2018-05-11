@@ -18,8 +18,6 @@ class CheckLogin
         if(!session('username')){
             if(session()->get('type')==1)
                 return redirect('index');
-            else
-                return redirect('test');
         }
         return $next($request);
     }

@@ -14,7 +14,6 @@
 
 @section('sidebar')
     @parent
-
     <div name="sidebar">
         <input type='checkbox' id='sidemenu'>
         <aside>
@@ -24,7 +23,7 @@
                 @if(Session::get('check') == 1)
                     {{--<a href="home"><li>welcome {{Session::get('username')}}</li></a>--}}
                     <li id="showaccounts" data-toggle="modal" data-target="#showAccounts">show my accounts</li>
-                        @if($space!=0)
+                        @if($chosed_space!=0)
                             <a href="decompressFile" class="menua"><li id="decompressFile">decompress file</li></a>
                             <li id="buildWebsite" data-toggle="modal" data-target="#confirmRebuild">build my website</li>
                             <a href="restartContainer" class="menua"><li id="restartContainer">restart container</li></a>
@@ -97,8 +96,8 @@
                                 <div class="col-md-offset-1">
                                     <label class="col-sm-4" for="mysqlpass">mysql password</label>
                                     <div class="col-sm-6">
-                                        <input id="mysqlpass" readonly="readonly" type="password" class="form-control" value="mysql password">
-                                        <img id="mysqlvisible" class="visible" src="{{URL::asset('/img/visible.png')}}" onclick="mysqlchange()"/>
+                                        <input id="mysqlpass" readonly="readonly" type="password" class="form-control inputinline" value="mysql password">
+                                        <img id="mysqlvisible" class="visible imgline" src="{{URL::asset('/img/visible.png')}}" onclick="mysqlchange()"/>
                                     </div>
                                 </div>
                             </div>
@@ -228,35 +227,39 @@
 @endsection
 
 @section('content')
-    @if(Session::get('check')==1)
-        <div class="iframe-wrapper">
-            <iframe id="iframe" src="http://192.168.27.210:{{Session::get('port')?Session::get('port'):'80/websites/error.html'}}" scrolling="auto" frameborder="0">
-            </iframe>
-        </div>
-    @else
-        <div class="col-md-6">
-            <table class="table table-bordered">
-                <tr>
-                    <th>#</th>
-                    <th>Deployed Website</th>
-                    <th>Image</th>
-                    <th>User</th>
-                </tr>
-                @if(isset($users))
-                    @foreach($users as $user)
-                        <tr>
-                            <th>{{$user->id}}</th>
-                            <th><a href='{{"http://192.168.27.210:".$user->port}}' target="_blank">{{"http://192.168.27.210:".$user->port}}</a></th>
-                            <th>{{$user->image}}</th>
-                            <th>{{$user->username}}</th>
-                        </tr>
-                    @endforeach
-                @else
-                    <p>users not found</p>
-                @endif
-            </table>
-        </div>
-        {!! $users->render() !!}
-    @endif
+    <div class="col-md-6">
+        @if(Session::get('check')==1)
+            <div class="iframe-wrapper">
+                <iframe id=iframeHome" style="width: 1024px;height: 800px;" src="http://{{Session::get('username')?Session::get('username'):'default'}}.example.com" scrolling="auto" onload="changeFrameHeight()" frameborder="0">
+                </iframe>
+            </div>
+        @else
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>#</th>
+                        <th>Deployed Website</th>
+                        <th>Image</th>
+                        <th>User</th>
+                    </tr>
+                    @if(isset($users))
+                        @foreach($users as $user)
+                            <tr>
+                                <th>{{$user->user_id}}</th>
+                                <th><a href='{{"http://".$user->username.".example.com"}}' target="_blank">{{"http://".$user->username.".example.com"}}</a></th>
+                                <th>{{$user->image}}</th>
+                                <th>{{$user->username}}</th>
+                            </tr>
+                        @endforeach
+                    @else
+                        <p>users not found</p>
+                    @endif
+                </table>
+                {!! $users->render() !!}
+            </div>
+
+        @endif
+    </div>
+
 @endsection
 

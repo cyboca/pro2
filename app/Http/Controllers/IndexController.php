@@ -17,8 +17,8 @@ class IndexController extends Controller
     public function index(){
         //$users=DB::select('select username from users where deployed=1');
 //        $users=DB::table('users')->paginate(4);
-        $user=new \App\User();
-        $users=$user->get_deployed_websites();
-        return view('index',['users'=>$users]);
+        //$user=new \App\User();
+        //$users=$user->get_deployed_websites();
+        return view('index');
     }
 }

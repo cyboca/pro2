@@ -19,11 +19,13 @@
 @show
 
 <div class="main" id="main">
-@section('sidebar')
-@show
-<div>
+
+    @section('sidebar')
+    @show
+
+
     @yield('content')
-</div>
+
 </div>
 </body>
 </html>

@@ -10,16 +10,19 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $user=new \App\User();
-        $username=$request->session()->get('username');
-        $users=$user->get_deployed_websites();
+        $check=$request->session()->get('check');
+        $manager=new \App\Manager();
+        $result=$manager->get_all_managers();
 
-        $managers=new \App\Manager();
-        $result=$managers->get_all_managers();
+        if($check){
+            $chosed_space=$user->check_space();
+            return view('home',['chosed_space'=>$chosed_space['space'],'spaces'=>$result]);
+        }else{
+            $space=$manager->get_current_space();
+            $users=$user->get_deployed_websites($space);
+            return view('home',['users'=>$users,'spaces'=>$result]);
+        }
 
-        $space=$user->check_space();
-
-
-        return view('home',$space,['spaces'=>$result,'users'=>$users]);
 
     }
 }
