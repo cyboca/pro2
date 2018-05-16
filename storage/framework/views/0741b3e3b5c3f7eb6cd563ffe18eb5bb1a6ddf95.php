@@ -230,7 +230,7 @@
     <div class="col-md-6">
         <?php if(Session::get('check')==1): ?>
             <div class="iframe-wrapper">
-                <iframe id=iframeHome" style="width: 1024px;height: 800px;" src="http://<?php echo e(Session::get('username')?Session::get('username'):'default'); ?>.example.com" scrolling="auto" onload="changeFrameHeight()" frameborder="0">
+                <iframe id=iframeHome" style="width: 1024px;height: 800px;" src="http://<?php echo e(Session::get('username')?Session::get('username'):'default'); ?>.synantera.cn" scrolling="auto" onload="changeFrameHeight()" frameborder="0">
                 </iframe>
             </div>
         <?php else: ?>
@@ -246,7 +246,7 @@
                         <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <th><?php echo e($user->user_id); ?></th>
-                                <th><a href='<?php echo e("http://".$user->username.".example.com"); ?>' target="_blank"><?php echo e("http://".$user->username.".example.com"); ?></a></th>
+                                <th><a href='<?php echo e("http://".$user->username.".synantera.cn"); ?>' target="_blank"><?php echo e("http://".$user->username.".synantera.cn"); ?></a></th>
                                 <th><?php echo e($user->image); ?></th>
                                 <th><?php echo e($user->username); ?></th>
                             </tr>

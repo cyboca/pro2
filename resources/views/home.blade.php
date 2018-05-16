@@ -230,7 +230,7 @@
     <div class="col-md-6">
         @if(Session::get('check')==1)
             <div class="iframe-wrapper">
-                <iframe id=iframeHome" style="width: 1024px;height: 800px;" src="http://{{Session::get('username')?Session::get('username'):'default'}}.example.com" scrolling="auto" onload="changeFrameHeight()" frameborder="0">
+                <iframe id=iframeHome" style="width: 1024px;height: 800px;" src="http://{{Session::get('username')?Session::get('username'):'default'}}.synantera.cn" scrolling="auto" onload="changeFrameHeight()" frameborder="0">
                 </iframe>
             </div>
         @else
@@ -246,7 +246,7 @@
                         @foreach($users as $user)
                             <tr>
                                 <th>{{$user->user_id}}</th>
-                                <th><a href='{{"http://".$user->username.".example.com"}}' target="_blank">{{"http://".$user->username.".example.com"}}</a></th>
+                                <th><a href='{{"http://".$user->username.".synantera.cn"}}' target="_blank">{{"http://".$user->username.".synantera.cn"}}</a></th>
                                 <th>{{$user->image}}</th>
                                 <th>{{$user->username}}</th>
                             </tr>
